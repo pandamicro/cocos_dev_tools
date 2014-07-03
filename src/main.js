@@ -13,9 +13,9 @@
     var tt, at, ie = {};
     
     // InspectElement Proxy
-    ie.draw_rect = function(){ pipeDevtool.send({id:'ie.draw_rect', data:arguments}); }
-    ie.clear_rect = function(){ pipeDevtool.send({id:'ie.clear_rect', data:arguments}); }
-    ie.modify_node = function(){ pipeDevtool.send({id:'ie.modify_node', data:arguments}); }
+    ie.draw_rect = function(){ pipeDevtool.send({id:'ie.draw_rect', data:Array.prototype.slice.call(arguments)}); }
+    ie.clear_rect = function(){ pipeDevtool.send({id:'ie.clear_rect', data:Array.prototype.slice.call(arguments)}); }
+    ie.modify_node = function(){ pipeDevtool.send({id:'ie.modify_node', data:Array.prototype.slice.call(arguments)}); }
     
     
     tt = new global['tl.ui.TreeList'](document.getElementById('left'));

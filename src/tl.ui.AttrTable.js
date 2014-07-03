@@ -127,6 +127,7 @@
                     }
                     o.value = value;
                 }else if ({'texture':1,'image':1}[attr]){ // img
+                    //o = document.createElement('iframe');
                     o.type = 'image';
                     o.title = value;
                     o.src = value;

@@ -23,7 +23,7 @@ function PipeDevtool() {
             if (me.tryTimes >= me.TRYS) {
                // clearInterval(intervalId);
             }
-        },500);
+        },100);
        var script = '//#injector.min.js#';
        me.inject(script);
     };

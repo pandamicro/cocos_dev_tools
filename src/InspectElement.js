@@ -14,7 +14,7 @@
             var scenedraw;
             
             // to public
-            //me.scene_data = scene_data, me.scene_hash = scene_hash;
+            // me.scene_data = scene_data, me.scene_hash = scene_hash;
             
             function get_hierarchy(sc){
                 if (!sc){
@@ -56,7 +56,9 @@
                         a.text = node._className;
                         node.opacity != undefined && (a.attr.opacity = node.opacity);
                         node.color != undefined && (a.attr.color = node.color);
-                        node.texture && node.texture.url && (a.attr.texture = node.texture.url);
+                        var href = location.href.split('/');
+                        href.pop();
+                        node.texture && node.texture.url && (a.attr.texture = href.join('/') + '/' + node.texture.url);
                         
                         if (node._className == 'LabelTTF'){
                             a.attr.string = node.getString();
@@ -173,6 +175,7 @@
                     if (!document.getElementsByTagName('canvas').length) return; // no canvas
                     if (!cc || !cc.director) return; // no cc
                     
+                    console.log('cc',cc);
                     /*
                     function on_update(sc){
                         get_hierarchy();
