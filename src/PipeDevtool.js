@@ -11,6 +11,8 @@
     me.TRYS = 10;
     me.timeout = 10000;
 
+    var chrome = chrome || {};
+
     me.checkMessage = function() {
         // console.log('check', me.tryTimes);
         me.tryTimes ++;
@@ -29,7 +31,7 @@
                // clearInterval(intervalId);
             }
         },500);
-       var script = 'var _msg=[];var pipePage = {onMessage:function(message){console.log("receive:",message)},send:function(msg){_msg.push(msg)},flush:function(){var t=_msg;_msg=[];return t;}}';
+       var script = '//#PipePage.min.js#';
        me.inject(script);
     },
 

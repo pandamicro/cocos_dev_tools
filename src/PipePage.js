@@ -14,7 +14,7 @@
     };
 
     me.onMessage = function(message) {
-        console.log('receive :' + message);
+        console.log('receive :',message);
     };
 
     me.flush = function() {
