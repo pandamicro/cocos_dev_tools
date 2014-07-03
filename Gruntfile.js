@@ -14,7 +14,7 @@ module.exports = function (grunt) {
     uglify: {
       build: {
         files: {
-          'bin/injector.min.js' : ['src/PipePage.js', 'src/InspectElement.js']
+          'bin/injector.min.js' : ['src/PipePage.js', 'src/InspectElement.js', 'src/run.js']
         }
       }
     },
@@ -34,6 +34,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-text-replace');
 
-  grunt.registerTask('default', ['jshint', 'uglify', 'replace']);
+  grunt.registerTask('default', ['uglify', 'replace']);
 
 };
