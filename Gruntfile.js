@@ -3,6 +3,7 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    clean : ["bin"],
     jshint: {
       // define the files to lint
       files: ['Gruntfile.js', 'src/*.js', 'test/*.js'],
@@ -30,10 +31,11 @@ module.exports = function (grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-text-replace');
 
-  grunt.registerTask('default', ['uglify', 'replace']);
+  grunt.registerTask('default', ['clean', 'uglify', 'replace']);
 
 };

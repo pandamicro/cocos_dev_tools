@@ -2,12 +2,13 @@
   "name": "cocos-devtools",
   "version": "1.0.0",
   "description": "Extends Chrome Developer Tools, adding a tab that displays the Cocos2d engine data",
-  "repository":{ 
-    "type" : "git",
-    "url" : "https://bitbucket.org/siriuscor/cocos-devtools"
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/siriuscor/cocos-devtools"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-uglify": "^0.5.0",
     "grunt-text-replace": "^0.3.12"
