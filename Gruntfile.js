@@ -3,6 +3,14 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    jshint: {
+      // define the files to lint
+      files: ['Gruntfile.js', 'src/*.js', 'test/*.js'],
+      // configure JSHint (documented at http://www.jshint.com/docs/)
+      options: {
+          // more options here if you want to override JSHint defaults
+      }
+    },
     uglify: {
       build: {
         src: 'src/PipePage.js',
@@ -10,7 +18,7 @@ module.exports = function(grunt) {
       }
     },
     replace: {
-      test: {
+      injectScript: {
         src: ['src/*'],
         dest : 'bin/',
         replacements: [{
@@ -21,12 +29,10 @@ module.exports = function(grunt) {
     }
   });
 
-  // 加载包含 "uglify" 任务的插件。
-  grunt.loadNpmTasks('grunt-contrib-jst');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-text-replace');
 
-  // 默认被执行的任务列表。
-  grunt.registerTask('default', ['uglify','replace']);
+  grunt.registerTask('default', ['jshint','uglify','replace']);
 
 };

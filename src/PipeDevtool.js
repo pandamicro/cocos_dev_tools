@@ -18,12 +18,13 @@
         me.tryTimes ++;
         var script = 'pipePage.flush()';
         me.inject(script, function(messages) {
-            if (!messages || messages.length == 0) return;
+            if (!messages || messages.length === 0) return;
             for(var i = 0;i < messages.length; i++) {
                 me.onMessage(messages[i]);
             }
         });
-    }
+    };
+
     me.init = function() {
         var intervalId = setInterval(function(){
             me.checkMessage();
@@ -33,7 +34,7 @@
         },500);
        var script = '//#PipePage.min.js#';
        me.inject(script);
-    },
+    };
 
     me.send = function(message) {
         var messageSerial = JSON.stringify(message);
@@ -47,6 +48,8 @@
 
     me.inject = function(script, callback) {
         script = script.replace('\'', '\\\'');
+        /*jshint evil:true */
+        //we need eval to inject script to page,ignore jshint warning
         chrome.devtools.inspectedWindow.eval(script, callback);
     };
 }));

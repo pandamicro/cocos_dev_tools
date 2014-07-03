@@ -1,0 +1,1 @@
+Extends Chrome Developer Tools, adding a tab that displays the Cocos2d engine data

@@ -21,5 +21,6 @@
         var temp = me.messagePool;
         me.messagePool = [];
         return temp;
-    }
+    };
+    
 }));
