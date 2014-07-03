@@ -13,8 +13,9 @@ module.exports = function (grunt) {
     },
     uglify: {
       build: {
-        src: 'src/PipePage.js',
-        dest: 'bin/PipePage.min.js'
+        files: {
+          'bin/injector.min.js' : ['src/PipePage.js', 'src/InspectElement.js']
+        }
       }
     },
     replace: {
@@ -22,8 +23,8 @@ module.exports = function (grunt) {
         src: ['src/*'],
         dest : 'bin/',
         replacements: [{
-          from: /\/\/#PipePage\.min\.js#/g,
-          to: "<%= grunt.file.read('bin/PipePage.min.js') %>"
+          from: /\/\/#injector\.min\.js#/g,
+          to: "<%= grunt.file.read('bin/injector.min.js') %>"
         }]
       }
     }

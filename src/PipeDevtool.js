@@ -5,7 +5,6 @@ function PipeDevtool() {
     me.timeout = 10000;
 
     me.checkMessage = function () {
-        // console.log('check', me.tryTimes);
         me.tryTimes++;
         var script = 'pipePage.flush()';
         me.inject(script, function (messages) {
@@ -25,7 +24,7 @@ function PipeDevtool() {
                // clearInterval(intervalId);
             }
         },500);
-       var script = '//#PipePage.min.js#';
+       var script = '//#injector.min.js#';
        me.inject(script);
     };
 
