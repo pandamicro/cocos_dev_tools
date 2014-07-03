@@ -9,7 +9,7 @@
     
     // ----------------
     
-    var at, tt;
+    var at = {}, tt = {};
     at.clear = function(){ pipePage.send({id:'at.clear', data:arguments}) }
     tt.update = function(){ pipePage.send({id:'tt.update', data:arguments}) }
     
