@@ -6,6 +6,7 @@
             f.apply(this, message.data);
         }catch(e){ console.log(e) }
     };
+    window.pipePage = pipePage;
     
     // ----------------
     
