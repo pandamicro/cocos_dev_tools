@@ -3,9 +3,10 @@ var output = document.getElementById('msg');
 
 output.innerHTML = 'this is a test';
 
-pipeDevtool.init();
-pipeDevtool.send({"msg":'hello world from devtool'});
+var pipe = new PipeDevtool();
+pipe.init();
+pipe.send({"msg": 'hello world from devtool'});
 
-pipeDevtool.onMessage = function(message) {
+pipe.onMessage = function (message) {
     output.innerHTML += '<br>' + JSON.stringify(message);
 };

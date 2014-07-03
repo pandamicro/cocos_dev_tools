@@ -1,26 +1,20 @@
-(function (global, factory) {
-    if (typeof exports === "object" && exports) {
-        factory(exports); // CommonJS
-    } else if (typeof define === "function" && define.amd) {
-        define(['exports'], factory); // AMD
-    } else {
-        factory(global.pipePage = {}); // <script>
-    }
-}(this, function (me) {
+(function() {
+    var me = {};
     me.messagePool = [];
 
-    me.send = function(message) {
+    me.send = function (message) {
         me.messagePool.push(message);
     };
 
-    me.onMessage = function(message) {
-        console.log('receive :',message);
+    me.onMessage = function (message) {
+        console.log('receive :', message);
     };
 
-    me.flush = function() {
+    me.flush = function () {
         var temp = me.messagePool;
         me.messagePool = [];
         return temp;
     };
 
-}));
+    window.pipePage = me;
+})();

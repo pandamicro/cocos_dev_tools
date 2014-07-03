@@ -1,12 +1,5 @@
-(function (global, factory) {
-    if (typeof exports === "object" && exports) {
-        factory(exports); // CommonJS
-    } else if (typeof define === "function" && define.amd) {
-        define(['exports'], factory); // AMD
-    } else {
-        factory(global.pipeDevtool = {}); // <script>
-    }
-}(this, function (me) {
+function PipeDevtool() {
+    var me = this;
     me.tryTimes = 0;
     me.TRYS = 10;
     me.timeout = 10000;
@@ -52,4 +45,4 @@
         //we need eval to inject script to page,ignore jshint warning
         chrome.devtools.inspectedWindow.eval(script, callback);
     };
-}));
+}
