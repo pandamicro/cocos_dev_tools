@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
         src: ['src/*'],
         dest : 'bin/',
         replacements: [{
-          from: /\/\/#PipePage.min.js#/g,
+          from: /\/\/#PipePage\.min\.js#/g,
           to: "<%= grunt.file.read('bin/PipePage.min.js') %>"
         }]
       }
@@ -33,6 +33,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-text-replace');
 
-  grunt.registerTask('default', ['jshint','uglify','replace']);
+  grunt.registerTask('default', ['jshint', 'uglify', 'replace']);
 
 };

@@ -1,25 +1,25 @@
 (function (global, factory) {
-  if (typeof exports === "object" && exports) {
-    factory(exports); // CommonJS
-  } else if (typeof define === "function" && define.amd) {
-    define(['exports'], factory); // AMD
-  } else {
-    factory(global.pipeDevtool = {}); // <script>
-  }
+    if (typeof exports === "object" && exports) {
+        factory(exports); // CommonJS
+    } else if (typeof define === "function" && define.amd) {
+        define(['exports'], factory); // AMD
+    } else {
+        factory(global.pipeDevtool = {}); // <script>
+    }
 }(this, function (me) {
     me.tryTimes = 0;
     me.TRYS = 10;
     me.timeout = 10000;
 
-    var chrome = chrome || {};
-
-    me.checkMessage = function() {
+    me.checkMessage = function () {
         // console.log('check', me.tryTimes);
-        me.tryTimes ++;
+        me.tryTimes++;
         var script = 'pipePage.flush()';
-        me.inject(script, function(messages) {
-            if (!messages || messages.length === 0) return;
-            for(var i = 0;i < messages.length; i++) {
+        me.inject(script, function (messages) {
+            if (!messages || messages.length === 0) {
+                return;
+            }
+            for (var i = 0;i < messages.length; i++) {
                 me.onMessage(messages[i]);
             }
         });
