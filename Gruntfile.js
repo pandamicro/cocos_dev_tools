@@ -28,6 +28,9 @@ module.exports = function (grunt) {
           to: "<%= grunt.file.read('bin/injector.min.js') %>"
         }]
       }
+    },
+    exec: {
+      'pack-extension': 'cmd /C build.bat'
     }
   });
 
@@ -35,7 +38,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-text-replace');
+  grunt.loadNpmTasks('grunt-exec');
 
-  grunt.registerTask('default', ['clean', 'uglify', 'replace']);
+  grunt.registerTask('default', ['clean', 'uglify', 'replace', 'exec']);
 
 };
