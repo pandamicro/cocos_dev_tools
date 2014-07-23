@@ -18,6 +18,7 @@
                 add_css('\
             .clear:after{ content: ".";clear: both;display: block;height: 0;visibility: hidden;font-size: 0;line-height: 0; }\
             .tl-ui-scroll{overflow-y:overlay;} .tl-ui-scroll::-webkit-scrollbar {height:12px;overflow:visible;width:8px;background-color:transparent} .tl-ui-scroll::-webkit-scrollbar-thumb {border-radius:8px;background-color:rgba(0,0,0,0.2);}\
+            @-moz-document url-prefix() { .tl-ui-scroll{overflow-y:scroll} }\
             \
             /* tree css */\
             .tl-ui-tree {display:block; overflow: auto; position: relative;}\
@@ -60,8 +61,8 @@
                 });
                 
                 el.addEventListener('mouseout', function(e){
-                    //e.stopPropagation();
-                    //e.preventDefault();
+                    e.stopPropagation();
+                    e.preventDefault();
                     
                     me.on_out && me.on_out();
                 });
@@ -69,13 +70,10 @@
                 el.addEventListener('click', function(e){
                     var nd_dom = e.target;
                     (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I') && (nd_dom = nd_dom.parentNode); // get node dom, <div><b>name ...
-                    
-                    //console.log(nd_dom, nd_dom.__nodes);
-                    
                     e.stopPropagation();
                     e.preventDefault();
-                    
                     select_item(nd_dom);
+                    //console.log(nd_dom, nd_dom.__nodes);
                 });
                 
                 function find_parent_sibling(nd){
@@ -85,10 +83,8 @@
                         if (_n.className.indexOf('e') >-1){// && me.selected.__data && me.selected.__data.nodes && me.selected.__data.nodes.length){
                             n = _n.getElementsByClassName('nd')[0];
                         }
-                        
                         return n;
                     };
-                    
                     return f(nd);
                 }
                 
@@ -147,8 +143,10 @@
             
             function toggle(nd_dom){
                 // toggle
-                if (nd_dom.__is_not_inited && nd_dom.__nodes){
-                    insert(nd_dom.__nodes, nd_dom);
+                me.on_before_toggle && me.on_before_toggle(nd_dom);
+                
+                if (nd_dom.__is_not_inited && nd_dom.__data && nd_dom.__data.nodes){
+                    insert(nd_dom.__data.nodes, nd_dom);
                     nd_dom.__is_not_inited = false;
                 }
                 
@@ -157,6 +155,8 @@
                 }else if(nd_dom.className == 'nd c'){
                     nd_dom.className = 'nd e';
                 }
+                
+                me.on_after_toggle && me.on_after_toggle(nd_dom);
             }
             
             function select(nd_dom){
@@ -173,26 +173,55 @@
             }
             me.select_item = select_item;
             
+            function remove(d, parent){
+                var nd, nd_dom;
+                if (typeof parent == 'number' || typeof parent == 'string'){
+                    parent = document.getElementById(parent);
+                }
+                if (parent == null) return;
+                nd = d || {};
+                nd_dom = document.getElementById(nd.id);
+                nd_dom && parent.removeChild(nd_dom);
+                me.on_remove && me.on_remove(nd, parent);
+            }
+            me.remove = remove;
+            
             function insert(d, parent){
                 var nd, nd_dom;
-                //console.log(d, parent);
-                for (var i=0,j=d.length;i<j;i++){
-                    nd = d[i];
+                if (typeof parent == 'number' || typeof parent == 'string'){
+                    parent = document.getElementById(parent);
+                }
+                if (parent == null) return;
+                
+                function ir(){
                     nd_dom = document.createElement('DIV');
+                    nd_dom.id = nd.id || null;
                     nd_dom.className = 'nd';
                     nd_dom.innerHTML = '<b>'+ nd.text || '..' + '</b>';
-                    
                     // set the source data
                     nd && (typeof nd == 'object') && (nd_dom.__data = nd);
                     if (nd && nd.nodes && nd.nodes.length){
-                        nd_dom.__nodes = nd.nodes;
+                        //nd_dom.__nodes = nd.nodes;
                         nd_dom.className += ' c'; // collapsed, expanded
                         nd_dom.__is_not_inited = true;
                     }
                     parent.appendChild(nd_dom);
                 }
+                if (d.constructor.name == 'Array'){
+                    for (var i=0,j=d.length;i<j;i++)
+                        nd = d[i], ir();
+                }else{
+                    nd = d, ir();
+                }
+                me.on_insert && me.on_insert(d, parent);
             }
             me.insert = insert;
+            
+            function clear_children(el){
+                el = el || me.element;
+                el.innerHTML = String(el.innerHTML).match(/<b>\S+<\/b>/)[0];  // reserve title and clean nodes
+            }
+            me.clear_children = clear_children;
             
             function clear(el){
                 el = el || me.element;
