@@ -15,7 +15,7 @@ module.exports = function (grunt) {
     uglify: {
       build: {
         files: {
-          'bin/injector.min.js' : ['src/PipePage.js', 'src/InspectElement.js', 'src/run.js']
+          'bin/injector.min.js' : ['src/PipePage.js', 'src/InspectElement.js', 'src/injector.js']
         }
       }
     },

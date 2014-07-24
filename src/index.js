@@ -1,6 +1,6 @@
 chrome.devtools.panels.create("Cocos Elements",
     "",
-    "main.html",
+    "elements.html",
     function (panel) {
       // code invoked on panel creation
     }

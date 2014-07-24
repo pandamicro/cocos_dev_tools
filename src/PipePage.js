@@ -5,6 +5,7 @@
 
         me.send = function (message) {
             me.messagePool.push(message);
+            console.log('send :', message);
         };
 
         me.onMessage = function (message) {

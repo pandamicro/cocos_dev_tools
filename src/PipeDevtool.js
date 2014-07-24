@@ -28,14 +28,14 @@ function PipeDevtool() {
        me.inject(script);
     };
 
-    me.send = function(message) {
+    me.send = function(message, callback) {
         var messageSerial = JSON.stringify(message);
         var script = 'pipePage.onMessage(' + messageSerial + ')';
-        me.inject(script);
+        me.inject(script, function(v){ callback && callback(v) });
     };
 
     me.onMessage = function(message) {
-        console.log('receive :', message);
+        //console.log('receive :', message);
     };
 
     me.inject = function(script, callback) {

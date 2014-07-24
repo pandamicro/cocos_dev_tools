@@ -2,7 +2,7 @@
   "name": "Cocos DevTools",
   "version": "1.0",
   "description": "Extends chrome Developer Tools, adding a tab that displays the Cocos2d engine data",
-  "devtools_page": "devtools.html",
+  "devtools_page": "index.html",
   "manifest_version": 2,
   "permissions": [
           "debugger",

@@ -142,21 +142,20 @@
             }
             
             function toggle(nd_dom){
+                var callback = function(){
+                    if (nd_dom.__is_not_inited && nd_dom.__data && nd_dom.__data.nodes){
+                        insert(nd_dom.__data.nodes, nd_dom);
+                        nd_dom.__is_not_inited = false;
+                    }
+                    if(nd_dom.className == 'nd e'){
+                        nd_dom.className = 'nd c'
+                    }else if(nd_dom.className == 'nd c'){
+                        nd_dom.className = 'nd e';
+                    }
+                    me.on_after_toggle && me.on_after_toggle(nd_dom);
+                };
                 // toggle
-                me.on_before_toggle && me.on_before_toggle(nd_dom);
-                
-                if (nd_dom.__is_not_inited && nd_dom.__data && nd_dom.__data.nodes){
-                    insert(nd_dom.__data.nodes, nd_dom);
-                    nd_dom.__is_not_inited = false;
-                }
-                
-                if(nd_dom.className == 'nd e'){
-                    nd_dom.className = 'nd c'
-                }else if(nd_dom.className == 'nd c'){
-                    nd_dom.className = 'nd e';
-                }
-                
-                me.on_after_toggle && me.on_after_toggle(nd_dom);
+                me.on_before_toggle ? me.on_before_toggle(nd_dom, callback) : callback();
             }
             
             function select(nd_dom){

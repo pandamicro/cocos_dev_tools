@@ -11,8 +11,8 @@
             'use strict';
             var me = this;
             var scene, scene_data = [], scene_hash = {};
-            var scenedraw;
-            var scenedraw_nodes = {node:null, selected_node:null};
+            var scenedraw, scenedraw_nodes = {node:null, selected_node:null}, SCENEDRAW_NAME = 'INSPECT_ELEMENT_DRAWING';
+            
             
             // to public
             // me.scene_data = scene_data, me.scene_hash = scene_hash;
@@ -63,13 +63,13 @@
                 };
             }
             
-            function get_node_children(node){
+            function get_node_children(node, fn){
                 var tree_children = []
                 // get root
                 if (node == null){
                     try{
                         tree_children = cc.director.getRunningScene().getChildren();
-                    }catch(e){ return [] }
+                    }catch(e){ console.log('error', e, tree_children); return [] }
                 }
                 // get node's children
                 if (node instanceof cc.Node) tree_children = node.getChildren();
@@ -86,21 +86,29 @@
                 
                 var a, d, node, tree_data = [];
                 for (var i=0, j=tree_children.length; i<j; i++) {
-                    a = create_item_data(tree_children[i]),
-                    d = a.data,
-                    node = a.node;
-                    
-                    if (node.getChildren().length > 0) {
-                        // add a place-holder,and tell someone "i have a child" 
-                        d.nodes = []; d.nodes.length = node.getChildren().length;
-                        //d.nodes = [{id:null}]; 
-                        tree_data.push(d);
-                    }else{
-                        tree_data.push(d);
+                    if (tree_children[i].getTag() != SCENEDRAW_NAME){
+                        a = create_item_data(tree_children[i]),
+                        d = a.data,
+                        node = a.node;
+                        
+                        if (node.getChildren().length > 0) {
+                            // add a place-holder,and tell someone "i have a child" 
+                            d.nodes = []; d.nodes.length = node.getChildren().length;
+                            //d.nodes = [{id:null}]; 
+                            tree_data.push(d);
+                        }else{
+                            tree_data.push(d);
+                        }
+                        // get hash
+                        scene_hash[node.__instanceId] = node;
                     }
-                    // get hash
-                    scene_hash[node.__instanceId] = node;
                 }
+                
+                if (!scenedraw){
+                    create_scenedraw(cc.director.getRunningScene());
+                }
+                
+                fn && fn(tree_data);
                 return tree_data;
             }
             me.get_node_children = get_node_children;
@@ -150,9 +158,16 @@
             me.get_hierarchy = get_hierarchy;
             
             function create_scenedraw(sc){
+                var last_scenedraw = sc.getChildByTag(SCENEDRAW_NAME);
+                if (last_scenedraw){
+                    //scenedraw = last_scenedraw;
+                    //clear_rect();
+                    //return;
+                    last_scenedraw.getParent().removeChild(last_scenedraw);
+                }
                 scenedraw = null;
                 scenedraw = cc.DrawNode.create();
-                scenedraw.setTag('INSPECT_ELEMENT_DRAWING');
+                scenedraw.setTag(SCENEDRAW_NAME);
                 sc.addChild(scenedraw, 1000000);
             }
             
@@ -222,10 +237,21 @@
                         console.log('timeout: cocos2d engine is not be loaded.');
                         return;
                     }
-                    if (document && !document.getElementsByTagName('canvas').length) return; // no canvas
-                    if (!cc || !cc.director) return; // no cc
                     
-                    console.log('cc',cc);
+                    if (document && !document.getElementsByTagName('canvas').length) return; // no canvas
+                    //alert(cc.director._runScene)
+                    if (typeof cc != "object" || !cc.director){
+                    //if (!cc || !cc.director){
+                        return; // no cc
+                    }
+                    
+                    // is injected ?
+                    // if (cc.director._runScene){
+                        // clearInterval(tk);
+                        // return;
+                    // }
+                    
+                    console.log('cc is done!',cc);
                     /*
                     function on_update(sc){
                         get_hierarchy();
@@ -281,14 +307,19 @@
                         me.on_removeChild && me.on_removeChild(child, d);
                     };
                     
-                    me.on_loaded && me.on_loaded();
-                    
                     tk_update = setInterval(function(){
                         draw_rect(scenedraw_nodes.node, scenedraw_nodes.selected_node)
                     },80);
                     
+                    me.on_start && me.on_start();
+                    
                     clearInterval(tk);
                 },delay);
+            };
+            
+            me.end = function(){
+                clearInterval(tk);
+                clearInterval(tk_update);
             };
         
         };
