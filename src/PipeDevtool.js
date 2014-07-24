@@ -3,6 +3,8 @@ function PipeDevtool() {
     me.tryTimes = 0;
     me.TRYS = 10;
     me.timeout = 10000;
+    
+    me.inject_script = '//#injector.min.js#';
 
     me.checkMessage = function () {
         me.tryTimes++;
@@ -24,8 +26,8 @@ function PipeDevtool() {
                // clearInterval(intervalId);
             }
         },100);
-       var script = '//#injector.min.js#';
-       me.inject(script);
+       //var script = '//#injector.min.js#';
+       me.inject(me.inject_script);
     };
 
     me.send = function(message, callback) {

@@ -114,3 +114,13 @@
                 ie.modify_node(tt.selected.__data.id, attr_obj); // set the canvas
             }
         };
+        
+        
+    var tk = setInterval(function(){
+        chrome.devtools.inspectedWindow.eval('typeof pipePage == "object"', function(v){
+            if (!v){
+            //console.log('inspectedWindow::::::', iii);
+                pipeDevtool.inject(pipeDevtool.inject_script);
+            }
+        });
+    },100);

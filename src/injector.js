@@ -44,13 +44,12 @@
     
     ie.start();
     window.ie = ie;
+    
+    window.onbeforeunload = function() {
+        at.clear();
+        tt.clear();
+    };
 
     //tt.update(ie.get_hierarchy());
-    //window.onbeforeunload = function(){
-        //console.log(999999999999999999);
-    //    tt.clear();
-    //    at.clear();
-        //return false;
-    //};
     
 })();

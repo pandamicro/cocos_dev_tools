@@ -246,10 +246,11 @@
                     }
                     
                     // is injected ?
-                    // if (cc.director._runScene){
-                        // clearInterval(tk);
-                        // return;
-                    // }
+                    if (cc.director._runScene){
+                        me.on_start && me.on_start();
+                        clearInterval(tk);
+                        return;
+                    }
                     
                     console.log('cc is done!',cc);
                     /*
@@ -312,7 +313,6 @@
                     },80);
                     
                     me.on_start && me.on_start();
-                    
                     clearInterval(tk);
                 },delay);
             };
@@ -325,4 +325,4 @@
         };
         
         return InspectElement;
-}));;
+}));

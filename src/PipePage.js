@@ -5,11 +5,11 @@
 
         me.send = function (message) {
             me.messagePool.push(message);
-            console.log('send :', message);
+            //console.log('send :', message);
         };
 
         me.onMessage = function (message) {
-            console.log('receive :', message);
+            //console.log('receive :', message);
         };
 
         me.flush = function () {
