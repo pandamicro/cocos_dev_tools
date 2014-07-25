@@ -23,15 +23,18 @@
             .tl-ui-attr {display:block; position: relative;}\
             /*.tl-ui-attr:focus{ outline: 0px !important; }*/\
             .tl-ui-attr-i {border-bottom:1px solid gainsboro}\
-            .tl-ui-attr label {text-indent:10px; display: inline-block; width: 30%; color:#666; font: bold 12px "Helvetica Neue", Helvetica, Arial, sans-serif; vertical-align:middle; pointer-events:none;}\
-            .tl-ui-attr input, .tl-ui-attr textarea{ vertical-align:middle; display: inline-block; font-family: Consolas, Lucida Console, monospace; font-size:12px; padding:0; margin:2px 0px}\
+            .tl-ui-attr label {text-indent:10px; display: inline-block; width: 30%; color:#666; font: 100 12px Consolas, Lucida Console, monospace; vertical-align:middle; pointer-events:none;}\
+            .tl-ui-attr input, .tl-ui-attr textarea{ vertical-align:middle; display: inline-block; font:100 12px Consolas, Lucida Console, monospace; padding:0; margin:0px 0px}\
+            .tl-ui-attr input[readonly="true"], .tl-ui-attr [readonly="true"]{ opacity:.4 }\
             \
             .tl-ui-attr input[type="text"], .tl-ui-attr input[type="number"], .tl-ui-attr input[type="image"],\
             .tl-ui-attr textarea{ line-height:20px; width:69%; border:none; }\
             \
+            .tl-ui-attr input[type="number"]{ color:rgb(28, 0, 207); }\
+            .tl-ui-attr input[type="text"],.tl-ui-attr textarea{ color:rgb(196, 26, 22); }\
             .tl-ui-attr input[type="image"]{ border:none; height:40px; width:40px; }\
             \
-            .tl-ui-attr input[type="checkbox"]{ height:16px; width:16px; margin:4px 0;}\
+            .tl-ui-attr input[type="checkbox"]{ height:14px; width:14px; margin:2px 0;}\
             /*.tl-ui-attr input[type="checkbox"]{ border-radius:20px; background:gainsboro; width:48px; height:20px; -webkit-appearance:none; vertical-align: middle; transition: all .4s ease; }\
             .tl-ui-attr input[type="checkbox"]:checked{ background: limegreen; }\
             .tl-ui-attr input[type="checkbox"]:before{ border-radius:20px; transition: all .2s ease;content: " "; position: relative; display: block; background: white; width: 16px; height: 16px; top:2px; left:30px; z-index:1; }\
@@ -119,15 +122,28 @@
                 el.innerHTML = '<label title="'+attr+'">' +attr+ ':</label>';
                 
                 var o = document.createElement('input');
-                if ({'color':1,'fontColor':1}[attr] || (typeof value == 'object' && ((value.r && value.g && value.b) || (value.red && value.green && value.blue)))){ // color
+                
+                attr == 'fillStyle' ? console.log(attr, value, value.r, value.g) : null;
+                if ({'color':1,'fontColor':1}[attr] ||
+                    (typeof value == 'object' && 
+                        (
+                            (value.r && value.g && value.b) || 
+                            (value._aU8 && value._gU8 && value._bU8) || // 为兼容cocos2d某个版本的webgl下,color,无rgb属性的bug
+                            (value.red && value.green && value.blue)
+                        )
+                    )
+                ){ // color
                     o.type = 'color';
-                    // o.color = value;  // original value, et. {r,g,b}
                     if (typeof value == 'object'){  // convert to hex color, et. #336699
-                        value = rgb2hex(
-                            (value.r||value.red),(value.g || value.green),(value.b || value.blue)
-                        );
+                        var r=0,g=0,b=0;
+                        if (value.r){ // 正常的color能取到rgb
+                            r = (value.r||value.red), g = (value.g || value.green), b = (value.b || value.blue);
+                        }else if (value._aU8){ // 非正常的color
+                            r = value._rU8[0],g = value._gU8[0],b = value._bU8[0];
+                        }
+                        value = rgb2hex(r,g,b);
+                        o.title = ['R:'+r,'G:'+g,'B:'+b].join();
                     }
-                    o.value = value;
                 }else if ({'texture':1,'image':1}[attr]){ // img
                     //o = document.createElement('iframe');
                     o.type = 'image';
@@ -174,6 +190,8 @@
                 o.attr = attr;
                 o.setAttribute('attr',attr);
                 o.value = value;
+                
+                if (attr.substr(0,2) == '__') o.setAttribute('readonly',true);
                 
                 el.appendChild(o);
                 me.element.appendChild(el);

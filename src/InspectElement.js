@@ -16,51 +16,88 @@
             
             // to public
             // me.scene_data = scene_data, me.scene_hash = scene_hash;
+            
+            function set_attr(name, type, from, to){
+                to[name] = from;
+            }
+            
             function create_item_data(node){
-                var p = node.getParent() || {};
-                var a = {
-                    id: node.__instanceId,
-                    parentId: p.__instanceId || null,
+                var parent = node.getParent() || {};
+                var data = {
+                    id: node.__instanceId || null,
+                    parentId: parent.__instanceId || null,
                     /*node.getBoundingBoxToWorld(),/*data: node,*/
                     attr: {
+                        __instanceId: node.__instanceId || null,
                         tag: node.tag,
                         x: node.x, y: node.y, width: node.width, height: node.height,
                         visible: node.visible, zIndex: node.zIndex
                     },
-                    className: node._className
+                    className: node._className || null
                 };
                 
                 // in chrome
                 //if (node._className == 'LabelTTF'){
-                //    a.text = node.getString();
+                //    data.text = node.getString();
                 //}
                 // in plugin or webpage
-                a.text = node._className;
-                node.opacity != undefined && (a.attr.opacity = node.opacity);
-                node.color != undefined && (a.attr.color = node.color);
+                data.text = node._className || null;
+                node.opacity != undefined && (data.attr.opacity = node.opacity);
+                node.color != undefined && (data.attr.color = node.color);
                 var href = location.href.split('/');
                 href.pop();
-                node.texture && node.texture.url && (a.attr.texture = href.join('/') + '/' + node.texture.url);
+                node.texture && node.texture.url && (data.attr.texture = href.join('/') + '/' + node.texture.url);
+                
+                
+                //set_attr('string'.data.attr,node,'string');
                 
                 if (node._className == 'LabelTTF'){
-                    a.attr.string = node.getString();
-                    a.attr.fontName = node.fontName;
-                    a.attr.fontSize = node.fontSize;
+                    data.attr.string = node.getString();
+                    data.attr.fontName = node.fontName;
+                    data.attr.fontSize = node.fontSize;
                     
-                    a.attr.fillStyle = node.fillStyle;
-                    a.attr.lineWidth = node.lineWidth;
-                    a.attr.shadowBlur = node.shadowBlur;
-                    a.attr.shadowOffsetX = node.shadowOffsetX;
-                    a.attr.shadowOffsetY = node.shadowOffsetY;
-                    a.attr.shadowOpacity = node.shadowOpacity;
-                    a.attr.strokeStyle = node.strokeStyle;
-                    a.attr.textAlign = node.textAlign;
-                    a.attr.verticalAlign = node.verticalAlign;
+                    data.attr.fillStyle = node.fillStyle;
+                    data.attr.lineWidth = node.lineWidth;
+                    data.attr.shadowBlur = node.shadowBlur;
+                    data.attr.shadowOffsetX = node.shadowOffsetX;
+                    data.attr.shadowOffsetY = node.shadowOffsetY;
+                    data.attr.shadowOpacity = node.shadowOpacity;
+                    data.attr.strokeStyle = node.strokeStyle;
+                    data.attr.textAlign = node.textAlign;
+                    data.attr.verticalAlign = node.verticalAlign;
                 }
+                
+                if (node._className == 'Button'){
+                    data.attr.pressedActionEnabled = node.pressedActionEnabled;
+                    data.attr.titleFont = node.titleFont;
+                    data.attr.titleFontColor = node.titleFontColor;
+                    data.attr.titleFontName = node.titleFontName;
+                    data.attr.titleFontSize = node.titleFontSize;
+                    data.attr.titleText = node.titleText;
+                }
+                
+                if (node._className == 'CheckBox'){
+                    //set_attr();
+                    data.attr.selected = node.selected;
+                }
+                
+                /*
+                for (var i in node){
+                    //i = String(i).match(/get([A-Z]\S*)/), attr_name = i && i[1] || '';
+                    if (String(i).substr(0,1) != '_' && typeof node[i] != 'function'){
+                        !data.attr[i] && (data.attr[i] = node[i]);
+                    }
+                }
+                */
+                
                 return {
-                    data: a,
+                    data: data,
                     node: node
                 };
+            }
+            
+            function getChildren(node){
+                //node._children getChildren
             }
             
             function get_node_children(node, fn){
@@ -191,12 +228,14 @@
                 
                 if (node instanceof cc.Node && scenedraw){
                     box = node.getBoundingBoxToWorld();
-                    scenedraw.drawRect(cc.p(box.x,box.y), cc.p(box.x+box.width,box.y+box.height), cc.color(102,170,238,60), 1, cc.color(102,170,238,255));
+                    scenedraw.drawRect(cc.p(box.x,box.y), cc.p(box.x+box.width,box.y+box.height), cc.color(102,170,238,60), 2, cc.color(102,170,238,255));
                 }
                 //console.log('selected_node', selected_node, scene_hash[selected_node], selected_node instanceof cc.Node && scenedraw)
                 if (selected_node instanceof cc.Node && scenedraw){
                     box = selected_node.getBoundingBoxToWorld();
-                    scenedraw.drawRect(cc.p(box.x,box.y), cc.p(box.x+box.width,box.y+box.height), cc.color(0,0,0,0), 1, cc.color(238,204,102,240));
+                    // cc.color(0,0,0,1) 这地方很诡异，如果alpha设置成0，在某些场景下会画出黑色实心矩形
+                    // 目前真相不明，暂时设置为1，可以保证开启画一个内部透明的矩形。
+                    scenedraw.drawRect(cc.p(box.x,box.y), cc.p(box.x+box.width,box.y+box.height), cc.color(0,0,0,1), 2, cc.color(238,204,102,240));
                 }
             }
             me.draw_rect = draw_rect;
@@ -291,21 +330,26 @@
                     cc.Node.prototype.addChild = function(child, localZOrder, tag){
                         cc.Node.prototype._addChild.apply(this, [child, localZOrder, tag]);
                         var a = create_item_data(child),
-                            d = a.data,
+                            data = a.data,
                             node = a.node;    
                         scene_hash[node.__instanceId] = node;
-                        me.on_addChild && me.on_addChild(node, d);
+                        me.on_addChild && me.on_addChild(node, data);
                         //console.log('parentId', child.getParent().__instanceId)
                     };
                     
                     cc.Node.prototype._removeChild = cc.Node.prototype.removeChild;
                     cc.Node.prototype.removeChild = function(child, cleanup){
-                        scene_hash[child.__instanceId] = null;
-                        delete scene_hash[child.__instanceId];
-                        var p = child.getParent() || {},
-                            d = {id: child.__instanceId, parentId: p.__instanceId || null};
+                        var parent,data={};
+                        try{
+                            if (child.__instanceId == null) return;
+                            scene_hash[child.__instanceId] = null;
+                            delete scene_hash[child.__instanceId];
+                            parent = child.getParent() || {};
+                            data = {id: child.__instanceId, parentId: parent.__instanceId || null};
+                        }catch(e){}
+                        
                         cc.Node.prototype._removeChild.apply(this, [child, cleanup]);
-                        me.on_removeChild && me.on_removeChild(child, d);
+                        me.on_removeChild && me.on_removeChild(child, data);
                     };
                     
                     tk_update = setInterval(function(){

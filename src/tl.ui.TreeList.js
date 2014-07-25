@@ -23,7 +23,7 @@
             /* tree css */\
             .tl-ui-tree {display:block; overflow: auto; position: relative;}\
             .tl-ui-tree:focus{ outline: 0px !important; }\
-            .tl-ui-tree .nd{ user-select:none; cursor: default; color: #339; font-size: 12px; overflow: hidden; font-family: Consolas, Lucida Console, monospace; line-height: 16px; padding: 1px 0px 0px 16px}\
+            .tl-ui-tree .nd{ -moz-user-select:none; -webkit-user-select:none; cursor: default; color: #339; font-size: 12px; overflow: hidden; font-family: Consolas, Lucida Console, monospace; line-height: 16px; padding: 1px 0px 0px 16px}\
             \
             .tl-ui-tree .nd b{ font-weight:100; display: block}\
             .tl-ui-tree .nd b:hover:before{ content:" "; pointer-events: none; position:absolute; left:2px; right:2px; height: 16px; background-color:rgba(128,192,255,0.12); border-radius: 4px;}\
@@ -67,12 +67,13 @@
                     me.on_out && me.on_out();
                 });
                 
-                el.addEventListener('click', function(e){
-                    var nd_dom = e.target;
-                    (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I') && (nd_dom = nd_dom.parentNode); // get node dom, <div><b>name ...
+                el.addEventListener('mousedown', function(e){
                     e.stopPropagation();
                     e.preventDefault();
+                    var nd_dom = e.target;
+                    (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I') && (nd_dom = nd_dom.parentNode); // get node dom, <div><b>name ...
                     select_item(nd_dom);
+                    el.focus();
                     //console.log(nd_dom, nd_dom.__nodes);
                 });
                 
