@@ -123,7 +123,7 @@
                 
                 var o = document.createElement('input');
                 
-                attr == 'fillStyle' ? console.log(attr, value, value.r, value.g) : null;
+                //console.log(888888, attr, value);
                 if ({'color':1,'fontColor':1}[attr] ||
                     (typeof value == 'object' && 
                         (

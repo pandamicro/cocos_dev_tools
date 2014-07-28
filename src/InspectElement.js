@@ -17,8 +17,9 @@
             // to public
             // me.scene_data = scene_data, me.scene_hash = scene_hash;
             
-            function set_attr(name, type, from, to){
-                to[name] = from;
+            function set_attr(to, from, name, type){
+                to[name] = from[name];
+                console.log('set_attr', name, from[name]);
             }
             
             function create_item_data(node){
@@ -48,38 +49,84 @@
                 href.pop();
                 node.texture && node.texture.url && (data.attr.texture = href.join('/') + '/' + node.texture.url);
                 
-                
                 //set_attr('string'.data.attr,node,'string');
                 
                 if (node._className == 'LabelTTF'){
-                    data.attr.string = node.getString();
-                    data.attr.fontName = node.fontName;
-                    data.attr.fontSize = node.fontSize;
+                    // data.attr.string = node.getString();
+                    // data.attr.fontName = node.fontName;
+                    // data.attr.fontSize = node.fontSize;
                     
-                    data.attr.fillStyle = node.fillStyle;
-                    data.attr.lineWidth = node.lineWidth;
-                    data.attr.shadowBlur = node.shadowBlur;
-                    data.attr.shadowOffsetX = node.shadowOffsetX;
-                    data.attr.shadowOffsetY = node.shadowOffsetY;
-                    data.attr.shadowOpacity = node.shadowOpacity;
-                    data.attr.strokeStyle = node.strokeStyle;
-                    data.attr.textAlign = node.textAlign;
-                    data.attr.verticalAlign = node.verticalAlign;
+                    // data.attr.fillStyle = node.fillStyle;
+                    // data.attr.lineWidth = node.lineWidth;
+                    // data.attr.shadowBlur = node.shadowBlur;
+                    // data.attr.shadowOffsetX = node.shadowOffsetX;
+                    // data.attr.shadowOffsetY = node.shadowOffsetY;
+                    // data.attr.shadowOpacity = node.shadowOpacity;
+                    // data.attr.strokeStyle = node.strokeStyle;
+                    // data.attr.textAlign = node.textAlign;
+                    // data.attr.verticalAlign = node.verticalAlign;
+                    
+                    set_attr(data.attr, node, 'string');
+                    set_attr(data.attr, node, 'fontName');
+                    set_attr(data.attr, node, 'fontSize');
+                    
+                    set_attr(data.attr, node, 'fillStyle');
+                    set_attr(data.attr, node, 'lineWidth');
+                    set_attr(data.attr, node, 'shadowBlur');
+                    set_attr(data.attr, node, 'shadowOffsetX');
+                    set_attr(data.attr, node, 'shadowOffsetY');
+                    set_attr(data.attr, node, 'shadowOpacity');
+                    set_attr(data.attr, node, 'strokeStyle');
+                    set_attr(data.attr, node, 'textAlign');
+                    set_attr(data.attr, node, 'verticalAlign');
                 }
                 
                 if (node._className == 'Button'){
-                    data.attr.pressedActionEnabled = node.pressedActionEnabled;
-                    data.attr.titleFont = node.titleFont;
-                    data.attr.titleFontColor = node.titleFontColor;
-                    data.attr.titleFontName = node.titleFontName;
-                    data.attr.titleFontSize = node.titleFontSize;
-                    data.attr.titleText = node.titleText;
+                    // data.attr.pressedActionEnabled = node.pressedActionEnabled;
+                    // data.attr.titleFont = node.titleFont;
+                    // data.attr.titleColor = node.titleColor;
+                    
+                    // data.attr.titleFontName = node.titleFontName;
+                    // data.attr.titleFontSize = node.titleFontSize;
+                    // data.attr.titleText = node.titleText;
+                    set_attr(data.attr, node, 'pressedActionEnabled');
+                    set_attr(data.attr, node, 'titleFont');
+                    set_attr(data.attr, node, 'titleColor');
+                    set_attr(data.attr, node, 'titleFontName');
+                    set_attr(data.attr, node, 'titleFontSize');
+                    set_attr(data.attr, node, 'titleText');
                 }
                 
                 if (node._className == 'CheckBox'){
                     //set_attr();
-                    data.attr.selected = node.selected;
+                    set_attr(data.attr, node, 'selected');
                 }
+                
+                if (node._className == 'Layout'){
+                    set_attr(data.attr, node, 'clippingEnabled');
+                    set_attr(data.attr, node, 'clippingType');
+                    set_attr(data.attr, node, 'layoutType');
+                }
+                
+                if (node._className == 'LoadingBar'){
+                    set_attr(data.attr, node, 'direction');
+                    set_attr(data.attr, node, 'percent');
+                }
+                if (node._className == 'Slider'){
+                    set_attr(data.attr, node, 'percent');
+                }
+
+                if (node._className == 'TextField' || node._className == 'Text'){
+                    set_attr(data.attr, node, 'font');
+                    set_attr(data.attr, node, 'fontName');
+                    set_attr(data.attr, node, 'fontSize');
+                    set_attr(data.attr, node, 'maxLength');
+                    set_attr(data.attr, node, 'maxLengthEnabled');
+                    set_attr(data.attr, node, 'passwordEnabled');
+                    set_attr(data.attr, node, 'placeHolder');
+                    set_attr(data.attr, node, 'string');
+                }
+
                 
                 /*
                 for (var i in node){
