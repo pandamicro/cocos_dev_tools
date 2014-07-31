@@ -12,17 +12,32 @@
             var me = this;
             var scene, scene_data = [], scene_hash = {};
             var scenedraw, scenedraw_nodes = {node:null, selected_node:null}, SCENEDRAW_NAME = 'INSPECT_ELEMENT_DRAWING';
-            
+            var base_url = get_base_url();
             
             // to public
             // me.scene_data = scene_data, me.scene_hash = scene_hash;
             
-            function set_attr(to, from, name, type){
-                to[name] = from[name];
-                console.log('set_attr', name, from[name]);
+            function set_attr(to, from, name, type, init_value){
+                if (init_value && from[name] == null){
+                    to[name] = init_value;
+                }else{
+                    to[name] = from[name];
+                }
+                //console.log('set_attr', name, from[name]);
+            }
+            
+            function get_base_url(){
+                var p = location.pathname.split('/');
+                p.pop();
+                return location.protocol + '//' + location.host + p.join('/');
             }
             
             function create_item_data(node){
+                if (!node) return {
+                    data: {id:null},
+                    node: {__instanceId:null}
+                };
+                
                 var parent = node.getParent() || {};
                 var data = {
                     id: node.__instanceId || null,
@@ -37,6 +52,17 @@
                     className: node._className || null
                 };
                 
+                // anchorX
+                // anchorY
+                // rotation
+                // rotationX
+                // rotationY
+                // scale
+                // scaleX
+                // scaleY
+                // skewX
+                // skewY
+                
                 // in chrome
                 //if (node._className == 'LabelTTF'){
                 //    data.text = node.getString();
@@ -45,27 +71,13 @@
                 data.text = node._className || null;
                 node.opacity != undefined && (data.attr.opacity = node.opacity);
                 node.color != undefined && (data.attr.color = node.color);
-                var href = location.href.split('/');
-                href.pop();
-                node.texture && node.texture.url && (data.attr.texture = href.join('/') + '/' + node.texture.url);
+                
+                //console.log('node.texture:::', node && node.texture);
+                node.texture && typeof node.texture == 'object' && node.texture != null && node.texture.url && (data.attr.texture = base_url + '/' + node.texture.url);
                 
                 //set_attr('string'.data.attr,node,'string');
                 
-                if (node._className == 'LabelTTF'){
-                    // data.attr.string = node.getString();
-                    // data.attr.fontName = node.fontName;
-                    // data.attr.fontSize = node.fontSize;
-                    
-                    // data.attr.fillStyle = node.fillStyle;
-                    // data.attr.lineWidth = node.lineWidth;
-                    // data.attr.shadowBlur = node.shadowBlur;
-                    // data.attr.shadowOffsetX = node.shadowOffsetX;
-                    // data.attr.shadowOffsetY = node.shadowOffsetY;
-                    // data.attr.shadowOpacity = node.shadowOpacity;
-                    // data.attr.strokeStyle = node.strokeStyle;
-                    // data.attr.textAlign = node.textAlign;
-                    // data.attr.verticalAlign = node.verticalAlign;
-                    
+                if (node._className == 'LabelTTF' || node._className == 'TextFieldTTF'){
                     set_attr(data.attr, node, 'string');
                     set_attr(data.attr, node, 'fontName');
                     set_attr(data.attr, node, 'fontSize');
@@ -81,14 +93,104 @@
                     set_attr(data.attr, node, 'verticalAlign');
                 }
                 
+                if (node._className == 'LabelAtlas'){
+                    set_attr(data.attr, node, 'string');
+                }
+                
+                if (node._className == 'LayerGradient'){
+                    //set_attr(data.attr, node, 'compresseInterpolation');
+                    set_attr(data.attr, node, 'endColor');
+                    set_attr(data.attr, node, 'endOpacity');
+                    set_attr(data.attr, node, 'startColor');
+                    set_attr(data.attr, node, 'startOpacity');
+                    //set_attr(data.attr, node, 'vector');
+                }
+                
+                if (node._className == 'ScrollView'){
+                    set_attr(data.attr, node, 'bounceable');
+                    set_attr(data.attr, node, 'clippingToBounds');
+                    set_attr(data.attr, node, 'direction');
+                }
+                
+                
+                if (node._className == 'ParticleSystem' || 
+                    node._className == 'ParticleBatchNode' || 
+                    node._className == 'ParticleExplosion' || 
+                    node._className == 'ParticleFire' || 
+                    node._className == 'ParticleFireworks' || 
+                    node._className == 'ParticleFlower' || 
+                    node._className == 'ParticleGalaxy' || 
+                    node._className == 'ParticleMeteor' || 
+                    node._className == 'ParticleRain' || 
+                    node._className == 'ParticleSmoke' || 
+                    node._className == 'ParticleSnow' || 
+                    node._className == 'ParticleSpiral' || 
+                    node._className == 'ParticleSun'){
+                        set_attr(data.attr, node, 'angle');
+                        set_attr(data.attr, node, 'angleVar');
+                        set_attr(data.attr, node, 'atlasIndex');
+                        // {Boolean} autoRemoveOnFinish
+                        set_attr(data.attr, node, 'duration');
+                        set_attr(data.attr, node, 'emissionRate');
+                        set_attr(data.attr, node, 'emitterMode');
+                        set_attr(data.attr, node, 'endColor');
+                        set_attr(data.attr, node, 'endColorVar');
+                        // {Number} endRadius
+                        // {Number} endRadiusVar
+                        // {Number} endSize
+                        // {Number} endSizeVar
+                        // {Number} endSpin
+                        // {Number} endSpinVar
+                        // {cc.Point} gravity
+                        set_attr(data.attr, node, 'life');
+                        set_attr(data.attr, node, 'lifeVar');
+                        // {Boolean} opacityModifyRGB
+                        // {Number} particleCount
+                        // {Number} positionType
+                        // {cc.Point} posVar
+                        // {Number} rotatePerS
+                        // {Number} rotatePerSVar
+                        // {Boolean} rotationIsDir
+                        // {Number} shapeType
+                        // {cc.Point} sourcePos
+                        set_attr(data.attr, node, 'speed');
+                        set_attr(data.attr, node, 'speedVar');
+                        set_attr(data.attr, node, 'startColor');
+                        set_attr(data.attr, node, 'startColorVar');
+                        // {Number} startRadius
+                        // {Number} startRadiusVar
+                        // {Number} startSize
+                        // {Number} startSizeVar
+                        // {Number} startSpin
+                        // {Number} startSpinVar
+                        // {Number} tangentialAccel
+                        // {Number} tangentialAccelVar
+                        set_attr(data.attr, node, 'totalParticles');
+                }
+                
+                // ccui
+                // Widget Button
+                if (node._className == 'Widget' || 
+                node._className == 'CheckBox' || 
+                node._className == 'Layout' || 
+                node._className == 'LoadingBar' || 
+                node._className == 'Slider' || 
+                node._className == 'TextField' || node._className == 'Text'){
+                    set_attr(data.attr, node, 'actionTag');
+                    set_attr(data.attr, node, 'bright');
+                    set_attr(data.attr, node, 'enabled');
+                    set_attr(data.attr, node, 'focused');
+                    set_attr(data.attr, node, 'heightPercent');
+                    set_attr(data.attr, node, 'name');
+                    set_attr(data.attr, node, 'sizeType');
+                    set_attr(data.attr, node, 'touchEnabled');
+                    set_attr(data.attr, node, 'updateEnabled');
+                    set_attr(data.attr, node, 'widthPercent');
+                    set_attr(data.attr, node, 'xPercent');
+                    set_attr(data.attr, node, 'yPercent');
+                }
+                
                 if (node._className == 'Button'){
-                    // data.attr.pressedActionEnabled = node.pressedActionEnabled;
-                    // data.attr.titleFont = node.titleFont;
-                    // data.attr.titleColor = node.titleColor;
-                    
-                    // data.attr.titleFontName = node.titleFontName;
-                    // data.attr.titleFontSize = node.titleFontSize;
-                    // data.attr.titleText = node.titleText;
                     set_attr(data.attr, node, 'pressedActionEnabled');
                     set_attr(data.attr, node, 'titleFont');
                     set_attr(data.attr, node, 'titleColor');
@@ -103,9 +205,9 @@
                 }
                 
                 if (node._className == 'Layout'){
-                    set_attr(data.attr, node, 'clippingEnabled');
-                    set_attr(data.attr, node, 'clippingType');
-                    set_attr(data.attr, node, 'layoutType');
+                    set_attr(data.attr, node, 'clippingEnabled', null, false);
+                    //set_attr(data.attr, node, 'clippingType');
+                    //set_attr(data.attr, node, 'layoutType');
                 }
                 
                 if (node._className == 'LoadingBar'){
@@ -120,13 +222,12 @@
                     set_attr(data.attr, node, 'font');
                     set_attr(data.attr, node, 'fontName');
                     set_attr(data.attr, node, 'fontSize');
-                    set_attr(data.attr, node, 'maxLength');
-                    set_attr(data.attr, node, 'maxLengthEnabled');
-                    set_attr(data.attr, node, 'passwordEnabled');
-                    set_attr(data.attr, node, 'placeHolder');
+                    //set_attr(data.attr, node, 'maxLength', null, 0);
+                    //set_attr(data.attr, node, 'maxLengthEnabled', null, false);
+                    set_attr(data.attr, node, 'passwordEnabled', null, false);
+                    //set_attr(data.attr, node, 'placeHolder');
                     set_attr(data.attr, node, 'string');
                 }
-
                 
                 /*
                 for (var i in node){
@@ -252,7 +353,7 @@
                 scenedraw = null;
                 scenedraw = cc.DrawNode.create();
                 scenedraw.setTag(SCENEDRAW_NAME);
-                sc.addChild(scenedraw, 1000000);
+                sc.addChild(scenedraw, 1000000); // top level
             }
             
             function compare_hierarchy(){
@@ -268,21 +369,22 @@
                 (typeof node == 'number' || typeof node == 'string') && (node = scene_hash[node]);
                 (typeof selected_node == 'number' || typeof selected_node == 'string') && (selected_node = scene_hash[selected_node]);
                 clear_rect();
-                var box;
-                
+                var box,left,top,right,bottom;
                 scenedraw_nodes.node = node;
                 scenedraw_nodes.selected_node = selected_node;
                 
                 if (node instanceof cc.Node && scenedraw){
                     box = node.getBoundingBoxToWorld();
-                    scenedraw.drawRect(cc.p(box.x,box.y), cc.p(box.x+box.width,box.y+box.height), cc.color(102,170,238,60), 2, cc.color(102,170,238,255));
+                    left = box.x, top = box.y, right = box.x+(box.width||2), bottom = box.y+(box.height||2);
+                    scenedraw.drawRect(cc.p(left,top), cc.p(right,bottom), cc.color(102,170,238,60), 2, cc.color(102,170,238,255));
                 }
                 //console.log('selected_node', selected_node, scene_hash[selected_node], selected_node instanceof cc.Node && scenedraw)
                 if (selected_node instanceof cc.Node && scenedraw){
                     box = selected_node.getBoundingBoxToWorld();
+                    left = box.x, top = box.y, right = box.x+(box.width||2), bottom = box.y+(box.height||2);
                     // cc.color(0,0,0,1) 这地方很诡异，如果alpha设置成0，在某些场景下会画出黑色实心矩形
                     // 目前真相不明，暂时设置为1，可以保证开启画一个内部透明的矩形。
-                    scenedraw.drawRect(cc.p(box.x,box.y), cc.p(box.x+box.width,box.y+box.height), cc.color(0,0,0,1), 2, cc.color(238,204,102,240));
+                    scenedraw.drawRect(cc.p(left,top), cc.p(right,bottom), cc.color(0,0,0,1), 2, cc.color(238,204,102,240));
                 }
             }
             me.draw_rect = draw_rect;
@@ -293,7 +395,6 @@
                     attr = attr || {};
                     // set common
                     for (var i in attr) node[i] = attr[i];
-                    //window.cccc = node;
                 }
             }
             me.modify_node = modify_node;

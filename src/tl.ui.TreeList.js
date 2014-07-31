@@ -168,8 +168,8 @@
             }
             
             function select_item(nd_dom){
-                toggle(nd_dom);
                 select(nd_dom);
+                toggle(nd_dom);
             }
             me.select_item = select_item;
             

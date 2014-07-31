@@ -52,7 +52,6 @@
                     var nd_dom = e.target;
                     //e.stopPropagation();
                     //e.preventDefault();
-                    
                     if (nd_dom.tagName == 'INPUT' && nd_dom.type == 'number'){
                         me.element.parentNode.style.overflowY = 'hidden';
                     }else{
@@ -60,19 +59,31 @@
                     }
                 });
                 
+                // el.addEventListener('mousewheel', function(e){
+                    // var nd_dom = e.target;
+                    // if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
+                        // on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
+                    // }
+                // });
+                
                 el.addEventListener('change', function(e){
                     var nd_dom = e.target;
                     e.stopPropagation();
                     e.preventDefault();
                     
-                    var a = nd_dom.attr, v = get_value(nd_dom);
-                    on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
+                    if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
+                        on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
+                    }
                 });
+                
+                el.addEventListener('keydown', function(e){ me.disable_change = false });
+                el.addEventListener('mousedown', function(e){ me.disable_change = false });
                 
                 el.addEventListener('keyup', function(e){
                     var nd_dom = e.target;
                     e.stopPropagation();
                     e.preventDefault();
+                    
                     if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
                         on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
                     }
@@ -87,6 +98,7 @@
             }
             
             function on_change(nd_dom,attr,value){
+                if (me.disable_change) return;
                 me.on_change && me.on_change(nd_dom,attr,value);
             }
             
@@ -107,9 +119,9 @@
                 if (nd_dom.type == 'number'){
                     return Number(nd_dom.value);
                 }else if(nd_dom.type == 'color'){
-                    var h = hex2rgb(nd_dom.value);
-                    nd_dom.title = ['R:'+h.r,'G:'+h.g,'B:'+h.b].join();
-                    return h;
+                    var color = hex2rgb(nd_dom.value);
+                    nd_dom.title = ['R:'+color.r,'G:'+color.g,'B:'+color.b].join();
+                    return color;
                 }else if(nd_dom.type == 'checkbox'){
                     return Boolean(nd_dom.checked);
                 }
@@ -122,10 +134,8 @@
                 el.innerHTML = '<label title="'+attr+'">' +attr+ ':</label>';
                 
                 var o = document.createElement('input');
-                
-                //console.log(888888, attr, value);
                 if ({'color':1,'fontColor':1}[attr] ||
-                    (typeof value == 'object' && 
+                    (typeof value == 'object' && value != undefined &&
                         (
                             (value.r && value.g && value.b) || 
                             (value._aU8 && value._gU8 && value._bU8) || // 为兼容cocos2d某个版本的webgl下,color,无rgb属性的bug
@@ -205,10 +215,12 @@
             
             function update(d){
                 // Object.prototype.toString.call([]) == "[object Array]"
+                me.disable_change = true; // avoid the on_change event was triggered when reset element
                 me.element.innerHTML = '';
                 for (var attr in d){
                     create_item(attr, d[attr]);
                 }
+                me.disable_change = false;
             }
             me.update = update;
         };
