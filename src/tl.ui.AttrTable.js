@@ -25,7 +25,7 @@
             .tl-ui-attr-i {border-bottom:1px solid gainsboro}\
             .tl-ui-attr label {text-indent:10px; display: inline-block; width: 30%; color:#666; font: 100 12px Consolas, Lucida Console, monospace; vertical-align:middle; pointer-events:none;}\
             .tl-ui-attr input, .tl-ui-attr textarea{ vertical-align:middle; display: inline-block; font:100 12px Consolas, Lucida Console, monospace; padding:0; margin:0px 0px}\
-            .tl-ui-attr input[readonly="true"], .tl-ui-attr [readonly="true"]{ opacity:.4 }\
+            .tl-ui-attr-i[readonly="true"], .tl-ui-attr [readonly="true"]{ opacity:.5 }\
             \
             .tl-ui-attr input[type="text"], .tl-ui-attr input[type="number"], .tl-ui-attr input[type="image"],\
             .tl-ui-attr textarea{ line-height:20px; width:69%; border:none; }\
@@ -33,6 +33,7 @@
             .tl-ui-attr input[type="number"]{ color:rgb(28, 0, 207); }\
             .tl-ui-attr input[type="text"],.tl-ui-attr textarea{ color:rgb(196, 26, 22); }\
             .tl-ui-attr input[type="image"]{ border:none; height:40px; width:40px; }\
+            .tl-ui-attr a.image{ border:none; display: inline-block; background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGElEQVQYlWNgYGCQwoKxgqGgcJA5h3yFAAs8BRWVSwooAAAAAElFTkSuQmCC); }\
             \
             .tl-ui-attr input[type="checkbox"]{ height:14px; width:14px; margin:2px 0;}\
             /*.tl-ui-attr input[type="checkbox"]{ border-radius:20px; background:gainsboro; width:48px; height:20px; -webkit-appearance:none; vertical-align: middle; transition: all .4s ease; }\
@@ -52,6 +53,9 @@
                     var nd_dom = e.target;
                     //e.stopPropagation();
                     //e.preventDefault();
+                    
+                    if (nd_dom.getAttribute('readonly')) return;
+                    
                     if (nd_dom.tagName == 'INPUT' && nd_dom.type == 'number'){
                         me.element.parentNode.style.overflowY = 'hidden';
                     }else{
@@ -71,6 +75,8 @@
                     e.stopPropagation();
                     e.preventDefault();
                     
+                    if (nd_dom.getAttribute('readonly')) return;
+                    
                     if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
                         on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
                     }
@@ -83,6 +89,8 @@
                     var nd_dom = e.target;
                     e.stopPropagation();
                     e.preventDefault();
+                    
+                    if (nd_dom.getAttribute('readonly')) return;
                     
                     if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
                         on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
@@ -103,8 +111,9 @@
             }
             
             function rgb2hex(red, green, blue){
-                var decColor = red + 256 * green + 65536 * blue;
-                return '#' + decColor.toString(16);
+                //var decColor = red + 256 * green + 65536 * blue;
+                //return '#' + decColor.toString(16);
+                return '#' + ((blue | green << 8 | red << 16) | 1 << 24).toString(16).slice(1);
             }
             function hex2rgb(hex) {
                 var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -128,34 +137,24 @@
                 return nd_dom.value;
             }
             
-            function create_item(attr, value){
+            function create_item(attr, data){
                 var el = document.createElement('DIV');
                 el.className = 'tl-ui-attr-i';
-                el.innerHTML = '<label title="'+attr+'">' +attr+ ':</label>';
+                el.innerHTML = '<label>' +attr+ ':</label>';
+                el.title = data.desc||attr;
                 
                 var o = document.createElement('input');
-                if ({'color':1,'fontColor':1}[attr] ||
-                    (typeof value == 'object' && value != undefined &&
-                        (
-                            (value.r && value.g && value.b) || 
-                            (value._aU8 && value._gU8 && value._bU8) || // 为兼容cocos2d某个版本的webgl下,color,无rgb属性的bug
-                            (value.red && value.green && value.blue)
-                        )
-                    )
-                ){ // color
+                data = data || {};
+                var value = data.value;
+                if (data.type == 'color'){
                     o.type = 'color';
+                    value = value || {};
                     if (typeof value == 'object'){  // convert to hex color, et. #336699
-                        var r=0,g=0,b=0;
-                        if (value.r){ // 正常的color能取到rgb
-                            r = (value.r||value.red), g = (value.g || value.green), b = (value.b || value.blue);
-                        }else if (value._aU8){ // 非正常的color
-                            r = value._rU8[0],g = value._gU8[0],b = value._bU8[0];
-                        }
+                        var r = value.r, g = value.g, b = value.b;
                         value = rgb2hex(r,g,b);
                         o.title = ['R:'+r,'G:'+g,'B:'+b].join();
                     }
-                }else if ({'texture':1,'image':1}[attr]){ // img
-                    //o = document.createElement('iframe');
+                }else if (data.type == 'image'){
                     o.type = 'image';
                     o.title = value;
                     o.src = value;
@@ -179,12 +178,12 @@
                     };
                     img.src = value;
                     
-                    a.href = value, a.target = '_blank', a.appendChild(_o);
+                    a.href = value, a.target = '_blank', a.className = 'image', a.appendChild(_o);
                     o = a; // reset o
-                }else if (typeof value == 'boolean'){ // toggle
+                }else if (data.type == 'boolean'){
                     o.type = 'checkbox';
                     o.checked = value;
-                }else if (typeof value == 'number'){
+                }else if (data.type == 'number'){
                     o.type = 'number';
                     o.step = 'any';
                 }else if ({'string':1,'text':1,'title':1}[attr]){
@@ -192,7 +191,7 @@
                     o.attr = attr;
                     o.setAttribute('attr', attr);
                     o.innerHTML = value;
-                }else{
+                }else{ // string
                     o.type = 'text';
                 }
                 
@@ -200,8 +199,7 @@
                 o.attr = attr;
                 o.setAttribute('attr',attr);
                 o.value = value;
-                
-                if (attr.substr(0,2) == '__') o.setAttribute('readonly',true);
+                if (data.readonly) el.setAttribute('readonly',true), o.setAttribute('readonly',true);
                 
                 el.appendChild(o);
                 me.element.appendChild(el);

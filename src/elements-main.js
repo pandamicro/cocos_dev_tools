@@ -110,7 +110,8 @@
             if (tt.selected){
                 var attr_obj = {};// write an object for set attribute
                 attr_obj[attr] = value;
-                tt.selected.__data.attr[attr] = value; // set the tree data
+                //tt.selected.__data.attr[attr] = value; // set the tree data
+                tt.selected.__data.attr[attr].value = value; // set the tree data
                 ie.modify_node(tt.selected.__data.id, attr_obj); // set the canvas
             }
         };

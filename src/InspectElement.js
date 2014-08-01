@@ -17,13 +17,36 @@
             // to public
             // me.scene_data = scene_data, me.scene_hash = scene_hash;
             
-            function set_attr(to, from, name, type, init_value){
-                if (init_value && from[name] == null){
-                    to[name] = init_value;
+            function set_attr(to, from, name, type, readonly, value, desc){
+                try{
+                if (name == 'glServerState') return;
+                if (type == 'point') return;
+                if (type == 'size') return;
+                
+                to[name] = {
+                    type: type,
+                    readonly: readonly,
+                    //value: from[name],//,//from[name] == null ? from[name] : value
+                    desc: desc || name
+                };
+                //console.log('from.texture', name, type, from[name]);
+                
+                if (type == 'image'){
+                    from[name] && from[name].url && (to[name].value = base_url + '/' + from[name].url);
+                }else if(type == 'color'){
+                    var value = from[name];
+                    var r=255,g=255,b=255,a=255;
+                    // 为兼容cocos2d某个版本的webgl下,color,无rgb属性的bug
+                    if (value.r){ // 正常的color能取到rgb
+                        r = (value.r||value.red), g = (value.g || value.green), b = (value.b || value.blue);
+                    }else if (value._aU8){ // 非正常的color
+                        r = value._rU8[0],g = value._gU8[0],b = value._bU8[0];
+                    }
+                    to[name].value = {r:r,g:g,b:b,a:a};
                 }else{
-                    to[name] = from[name];
+                    to[name].value = from[name];
                 }
-                //console.log('set_attr', name, from[name]);
+                }catch(e){}
             }
             
             function get_base_url(){
@@ -33,35 +56,29 @@
             }
             
             function create_item_data(node){
+                console.log('create_item_data',node);
                 if (!node) return {
                     data: {id:null},
                     node: {__instanceId:null}
                 };
-                
-                var parent = node.getParent() || {};
+                var parent = node.getParent && node.getParent() || {};
                 var data = {
                     id: node.__instanceId || null,
                     parentId: parent.__instanceId || null,
-                    /*node.getBoundingBoxToWorld(),/*data: node,*/
-                    attr: {
-                        __instanceId: node.__instanceId || null,
-                        tag: node.tag,
-                        x: node.x, y: node.y, width: node.width, height: node.height,
-                        visible: node.visible, zIndex: node.zIndex
-                    },
+                    // attr: {
+                        // __instanceId: node.__instanceId || null,
+                        // tag: node.tag,
+                        // x: node.x, y: node.y, width: node.width, height: node.height,
+                        // visible: node.visible, zIndex: node.zIndex
+                    // },
+                    attr: {},
                     className: node._className || null
                 };
-                
-                // anchorX
-                // anchorY
-                // rotation
-                // rotationX
-                // rotationY
-                // scale
-                // scaleX
-                // scaleY
-                // skewX
-                // skewY
+                set_attr(data.attr, node, '__instanceId', 'string', true);
+                var attr_hash = InspectElementConfig[node._className] || {};
+                for (var attr_name in attr_hash){
+                    set_attr(data.attr, node, attr_name, attr_hash[attr_name].type, attr_hash[attr_name].readonly, attr_hash[attr_name].value, attr_hash[attr_name].desc);
+                }
                 
                 // in chrome
                 //if (node._className == 'LabelTTF'){
@@ -69,175 +86,6 @@
                 //}
                 // in plugin or webpage
                 data.text = node._className || null;
-                node.opacity != undefined && (data.attr.opacity = node.opacity);
-                node.color != undefined && (data.attr.color = node.color);
-                
-                //console.log('node.texture:::', node && node.texture);
-                node.texture && typeof node.texture == 'object' && node.texture != null && node.texture.url && (data.attr.texture = base_url + '/' + node.texture.url);
-                
-                //set_attr('string'.data.attr,node,'string');
-                
-                if (node._className == 'LabelTTF' || node._className == 'TextFieldTTF'){
-                    set_attr(data.attr, node, 'string');
-                    set_attr(data.attr, node, 'fontName');
-                    set_attr(data.attr, node, 'fontSize');
-                    
-                    set_attr(data.attr, node, 'fillStyle');
-                    set_attr(data.attr, node, 'lineWidth');
-                    set_attr(data.attr, node, 'shadowBlur');
-                    set_attr(data.attr, node, 'shadowOffsetX');
-                    set_attr(data.attr, node, 'shadowOffsetY');
-                    set_attr(data.attr, node, 'shadowOpacity');
-                    set_attr(data.attr, node, 'strokeStyle');
-                    set_attr(data.attr, node, 'textAlign');
-                    set_attr(data.attr, node, 'verticalAlign');
-                }
-                
-                if (node._className == 'LabelAtlas'){
-                    set_attr(data.attr, node, 'string');
-                }
-                
-                if (node._className == 'LayerGradient'){
-                    //set_attr(data.attr, node, 'compresseInterpolation');
-                    set_attr(data.attr, node, 'endColor');
-                    set_attr(data.attr, node, 'endOpacity');
-                    set_attr(data.attr, node, 'startColor');
-                    set_attr(data.attr, node, 'startOpacity');
-                    //set_attr(data.attr, node, 'vector');
-                }
-                
-                if (node._className == 'ScrollView'){
-                    set_attr(data.attr, node, 'bounceable');
-                    set_attr(data.attr, node, 'clippingToBounds');
-                    set_attr(data.attr, node, 'direction');
-                }
-                
-                
-                if (node._className == 'ParticleSystem' || 
-                    node._className == 'ParticleBatchNode' || 
-                    node._className == 'ParticleExplosion' || 
-                    node._className == 'ParticleFire' || 
-                    node._className == 'ParticleFireworks' || 
-                    node._className == 'ParticleFlower' || 
-                    node._className == 'ParticleGalaxy' || 
-                    node._className == 'ParticleMeteor' || 
-                    node._className == 'ParticleRain' || 
-                    node._className == 'ParticleSmoke' || 
-                    node._className == 'ParticleSnow' || 
-                    node._className == 'ParticleSpiral' || 
-                    node._className == 'ParticleSun'){
-                        set_attr(data.attr, node, 'angle');
-                        set_attr(data.attr, node, 'angleVar');
-                        set_attr(data.attr, node, 'atlasIndex');
-                        // {Boolean} autoRemoveOnFinish
-                        set_attr(data.attr, node, 'duration');
-                        set_attr(data.attr, node, 'emissionRate');
-                        set_attr(data.attr, node, 'emitterMode');
-                        set_attr(data.attr, node, 'endColor');
-                        set_attr(data.attr, node, 'endColorVar');
-                        // {Number} endRadius
-                        // {Number} endRadiusVar
-                        // {Number} endSize
-                        // {Number} endSizeVar
-                        // {Number} endSpin
-                        // {Number} endSpinVar
-                        // {cc.Point} gravity
-                        set_attr(data.attr, node, 'life');
-                        set_attr(data.attr, node, 'lifeVar');
-                        // {Boolean} opacityModifyRGB
-                        // {Number} particleCount
-                        // {Number} positionType
-                        // {cc.Point} posVar
-                        // {Number} rotatePerS
-                        // {Number} rotatePerSVar
-                        // {Boolean} rotationIsDir
-                        // {Number} shapeType
-                        // {cc.Point} sourcePos
-                        set_attr(data.attr, node, 'speed');
-                        set_attr(data.attr, node, 'speedVar');
-                        set_attr(data.attr, node, 'startColor');
-                        set_attr(data.attr, node, 'startColorVar');
-                        // {Number} startRadius
-                        // {Number} startRadiusVar
-                        // {Number} startSize
-                        // {Number} startSizeVar
-                        // {Number} startSpin
-                        // {Number} startSpinVar
-                        // {Number} tangentialAccel
-                        // {Number} tangentialAccelVar
-                        set_attr(data.attr, node, 'totalParticles');
-                }
-                
-                // ccui
-                // Widget Button
-                if (node._className == 'Widget' || 
-                node._className == 'CheckBox' || 
-                node._className == 'Layout' || 
-                node._className == 'LoadingBar' || 
-                node._className == 'Slider' || 
-                node._className == 'TextField' || node._className == 'Text'){
-                    set_attr(data.attr, node, 'actionTag');
-                    set_attr(data.attr, node, 'bright');
-                    set_attr(data.attr, node, 'enabled');
-                    set_attr(data.attr, node, 'focused');
-                    set_attr(data.attr, node, 'heightPercent');
-                    set_attr(data.attr, node, 'name');
-                    set_attr(data.attr, node, 'sizeType');
-                    set_attr(data.attr, node, 'touchEnabled');
-                    set_attr(data.attr, node, 'updateEnabled');
-                    set_attr(data.attr, node, 'widthPercent');
-                    set_attr(data.attr, node, 'xPercent');
-                    set_attr(data.attr, node, 'yPercent');
-                }
-                
-                if (node._className == 'Button'){
-                    set_attr(data.attr, node, 'pressedActionEnabled');
-                    set_attr(data.attr, node, 'titleFont');
-                    set_attr(data.attr, node, 'titleColor');
-                    set_attr(data.attr, node, 'titleFontName');
-                    set_attr(data.attr, node, 'titleFontSize');
-                    set_attr(data.attr, node, 'titleText');
-                }
-                
-                if (node._className == 'CheckBox'){
-                    //set_attr();
-                    set_attr(data.attr, node, 'selected');
-                }
-                
-                if (node._className == 'Layout'){
-                    set_attr(data.attr, node, 'clippingEnabled', null, false);
-                    //set_attr(data.attr, node, 'clippingType');
-                    //set_attr(data.attr, node, 'layoutType');
-                }
-                
-                if (node._className == 'LoadingBar'){
-                    set_attr(data.attr, node, 'direction');
-                    set_attr(data.attr, node, 'percent');
-                }
-                if (node._className == 'Slider'){
-                    set_attr(data.attr, node, 'percent');
-                }
-
-                if (node._className == 'TextField' || node._className == 'Text'){
-                    set_attr(data.attr, node, 'font');
-                    set_attr(data.attr, node, 'fontName');
-                    set_attr(data.attr, node, 'fontSize');
-                    //set_attr(data.attr, node, 'maxLength', null, 0);
-                    //set_attr(data.attr, node, 'maxLengthEnabled', null, false);
-                    set_attr(data.attr, node, 'passwordEnabled', null, false);
-                    //set_attr(data.attr, node, 'placeHolder');
-                    set_attr(data.attr, node, 'string');
-                }
-                
-                /*
-                for (var i in node){
-                    //i = String(i).match(/get([A-Z]\S*)/), attr_name = i && i[1] || '';
-                    if (String(i).substr(0,1) != '_' && typeof node[i] != 'function'){
-                        !data.attr[i] && (data.attr[i] = node[i]);
-                    }
-                }
-                */
-                
                 return {
                     data: data,
                     node: node
@@ -477,11 +325,13 @@
                     cc.Node.prototype._addChild = cc.Node.prototype.addChild;
                     cc.Node.prototype.addChild = function(child, localZOrder, tag){
                         cc.Node.prototype._addChild.apply(this, [child, localZOrder, tag]);
+                        //try{
                         var a = create_item_data(child),
                             data = a.data,
                             node = a.node;    
                         scene_hash[node.__instanceId] = node;
                         me.on_addChild && me.on_addChild(node, data);
+                        //}catch(e){}
                         //console.log('parentId', child.getParent().__instanceId)
                     };
                     
