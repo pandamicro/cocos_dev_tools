@@ -15,6 +15,7 @@ module.exports = function (grunt) {
     uglify: {
       build: {
         files: {
+          'bin/config.min.js' : ['src/InspectElementConfig.js'],
           'bin/injector.min.js' : ['src/PipePage.js', 'src/InspectElement.js', 'src/injector.js']
         }
       }
@@ -26,6 +27,10 @@ module.exports = function (grunt) {
         replacements: [{
           from: /\/\/#injector\.min\.js#/g,
           to: "<%= grunt.file.read('bin/injector.min.js') %>"
+        },
+        {
+          from: /\/\/#config\.min\.js#/g,
+          to: "<%= grunt.file.read('bin/config.min.js') %>"
         }]
       }
     },

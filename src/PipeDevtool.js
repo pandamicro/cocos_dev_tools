@@ -3,8 +3,9 @@ function PipeDevtool() {
     me.tryTimes = 0;
     me.TRYS = 10;
     me.timeout = 10000;
+    //#config.min.js#
     
-    me.inject_script = '//#injector.min.js#';
+    me.inject_script = 'var InspectElementConfig = ' + JSON.stringify(InspectElementConfig) + ';' + '//#injector.min.js#';
 
     me.checkMessage = function () {
         me.tryTimes++;
