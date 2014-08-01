@@ -1,0 +1,13 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "includePattern": ".+\\.js$"
+    },
+    "plugins": [],
+    "opts":{
+        "explain": true,
+        "recurse": true
+    }
+}
