@@ -63,12 +63,12 @@
                     }
                 });
                 
-                // el.addEventListener('mousewheel', function(e){
-                    // var nd_dom = e.target;
-                    // if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
-                        // on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
-                    // }
-                // });
+                el.addEventListener('mousewheel', function(e){
+                    var nd_dom = e.target;
+                    if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
+                        on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
+                    }
+                });
                 
                 el.addEventListener('change', function(e){
                     var nd_dom = e.target;
