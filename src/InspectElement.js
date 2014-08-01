@@ -29,7 +29,6 @@
                     //value: from[name],//,//from[name] == null ? from[name] : value
                     desc: desc || name
                 };
-                //console.log('from.texture', name, type, from[name]);
                 
                 if (type == 'image'){
                     from[name] && from[name].url && (to[name].value = base_url + '/' + from[name].url);
@@ -56,7 +55,7 @@
             }
             
             function create_item_data(node){
-                console.log('create_item_data',node);
+                //console.log('create_item_data',node);
                 if (!node) return {
                     data: {id:null},
                     node: {__instanceId:null}
