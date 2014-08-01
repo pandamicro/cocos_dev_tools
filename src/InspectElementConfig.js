@@ -8877,6 +8877,271 @@ var InspectElementConfig = { ClippingNode:
       { desc: 'The state of OpenGL server side',
         type: 'number',
         value: 0 } },
+  Armature: 
+   { name: { desc: 'The name of the armature', type: 'string', value: '' },
+     version: { desc: 'The version', type: 'number', value: 0 },
+     opacity: { desc: 'Opacity of node', type: 'number', value: 0 },
+     opacityModifyRGB: 
+      { desc: 'Indicate whether or not the opacity modify color',
+        type: 'boolean',
+        value: false },
+     cascadeOpacity: 
+      { desc: 'Indicate whether or not it will set cascade opacity',
+        type: 'boolean',
+        value: false },
+     color: { desc: 'Color of node', type: 'color', value: null },
+     cascadeColor: 
+      { desc: 'Indicate whether or not it will set cascade color',
+        type: 'boolean',
+        value: false },
+     x: { desc: 'x axis position of node', type: 'number', value: 0 },
+     y: { desc: 'y axis position of node', type: 'number', value: 0 },
+     width: { desc: 'Width of node', type: 'number', value: 0 },
+     height: { desc: 'Height of node', type: 'number', value: 0 },
+     anchorX: 
+      { desc: 'Anchor point\'s position on x axis',
+        type: 'number',
+        value: 0 },
+     anchorY: 
+      { desc: 'Anchor point\'s position on y axis',
+        type: 'number',
+        value: 0 },
+     skewX: { desc: 'Skew x', type: 'number', value: 0 },
+     skewY: { desc: 'Skew y', type: 'number', value: 0 },
+     zIndex: 
+      { desc: 'Z order in depth which stands for the drawing order',
+        type: 'number',
+        value: 0 },
+     vertexZ: 
+      { desc: 'WebGL Z vertex of this node, z order works OK if all the nodes uses the same openGL Z vertex',
+        type: 'number',
+        value: 0 },
+     rotation: { desc: 'Rotation of node', type: 'number', value: 0 },
+     rotationX: { desc: 'Rotation on x axis', type: 'number', value: 0 },
+     rotationY: { desc: 'Rotation on y axis', type: 'number', value: 0 },
+     scale: { desc: 'Scale of node', type: 'number', value: 0 },
+     scaleX: { desc: 'Scale on x axis', type: 'number', value: 0 },
+     scaleY: { desc: 'Scale on y axis', type: 'number', value: 0 },
+     childrenCount: 
+      { desc: '<@readonly> Number of children',
+        type: 'number',
+        value: 0,
+        readonly: true },
+     visible: 
+      { desc: 'Indicate whether node is visible or not',
+        type: 'boolean',
+        value: false },
+     running: 
+      { desc: '<@readonly> Indicate whether node is running or not',
+        type: 'boolean',
+        value: false,
+        readonly: true },
+     ignoreAnchor: 
+      { desc: 'Indicate whether ignore the anchor point property for positionning',
+        type: 'boolean',
+        value: false },
+     tag: { desc: 'Tag of node', type: 'number', value: 0 },
+     arrivalOrder: 
+      { desc: 'The arrival order, indicates which children is added previously',
+        type: 'number',
+        value: 0 },
+     glServerState: 
+      { desc: 'The state of OpenGL server side',
+        type: 'number',
+        value: 0 } },
+  Bone: 
+   { transformDirty: 
+      { desc: 'Indicate whether the transform is dirty',
+        type: 'boolean',
+        value: false },
+     ignoreMovementBoneData: 
+      { desc: 'Indicate whether force the bone to show When CCArmature play a animation and there isn\'t a CCMovementBoneData of this bone in this CCMovementData.',
+        type: 'boolean',
+        value: false },
+     name: { desc: 'The name of the bone', type: 'string', value: '' },
+     blendDirty: 
+      { desc: 'Indicate whether the blend is dirty',
+        type: 'boolean',
+        value: false },
+     opacity: { desc: 'Opacity of node', type: 'number', value: 0 },
+     opacityModifyRGB: 
+      { desc: 'Indicate whether or not the opacity modify color',
+        type: 'boolean',
+        value: false },
+     cascadeOpacity: 
+      { desc: 'Indicate whether or not it will set cascade opacity',
+        type: 'boolean',
+        value: false },
+     color: { desc: 'Color of node', type: 'color', value: null },
+     cascadeColor: 
+      { desc: 'Indicate whether or not it will set cascade color',
+        type: 'boolean',
+        value: false },
+     x: { desc: 'x axis position of node', type: 'number', value: 0 },
+     y: { desc: 'y axis position of node', type: 'number', value: 0 },
+     width: { desc: 'Width of node', type: 'number', value: 0 },
+     height: { desc: 'Height of node', type: 'number', value: 0 },
+     anchorX: 
+      { desc: 'Anchor point\'s position on x axis',
+        type: 'number',
+        value: 0 },
+     anchorY: 
+      { desc: 'Anchor point\'s position on y axis',
+        type: 'number',
+        value: 0 },
+     skewX: { desc: 'Skew x', type: 'number', value: 0 },
+     skewY: { desc: 'Skew y', type: 'number', value: 0 },
+     zIndex: 
+      { desc: 'Z order in depth which stands for the drawing order',
+        type: 'number',
+        value: 0 },
+     vertexZ: 
+      { desc: 'WebGL Z vertex of this node, z order works OK if all the nodes uses the same openGL Z vertex',
+        type: 'number',
+        value: 0 },
+     rotation: { desc: 'Rotation of node', type: 'number', value: 0 },
+     rotationX: { desc: 'Rotation on x axis', type: 'number', value: 0 },
+     rotationY: { desc: 'Rotation on y axis', type: 'number', value: 0 },
+     scale: { desc: 'Scale of node', type: 'number', value: 0 },
+     scaleX: { desc: 'Scale on x axis', type: 'number', value: 0 },
+     scaleY: { desc: 'Scale on y axis', type: 'number', value: 0 },
+     childrenCount: 
+      { desc: '<@readonly> Number of children',
+        type: 'number',
+        value: 0,
+        readonly: true },
+     visible: 
+      { desc: 'Indicate whether node is visible or not',
+        type: 'boolean',
+        value: false },
+     running: 
+      { desc: '<@readonly> Indicate whether node is running or not',
+        type: 'boolean',
+        value: false,
+        readonly: true },
+     ignoreAnchor: 
+      { desc: 'Indicate whether ignore the anchor point property for positionning',
+        type: 'boolean',
+        value: false },
+     tag: { desc: 'Tag of node', type: 'number', value: 0 },
+     arrivalOrder: 
+      { desc: 'The arrival order, indicates which children is added previously',
+        type: 'number',
+        value: 0 },
+     glServerState: 
+      { desc: 'The state of OpenGL server side',
+        type: 'number',
+        value: 0 } },
+  Skin: 
+   { displayName: 
+      { desc: '<@readonly> The displayed name of skin',
+        type: 'string',
+        value: '',
+        readonly: true },
+     dirty: 
+      { desc: 'Indicates whether the sprite needs to be updated.',
+        type: 'boolean',
+        value: false },
+     flippedX: 
+      { desc: 'Indicates whether or not the spirte is flipped on x axis.',
+        type: 'boolean',
+        value: false },
+     flippedY: 
+      { desc: 'Indicates whether or not the spirte is flipped on y axis.',
+        type: 'boolean',
+        value: false },
+     offsetX: 
+      { desc: '<@readonly> The offset position on x axis of the sprite in texture. Calculated automatically by editors like Zwoptex.',
+        type: 'number',
+        value: 0,
+        readonly: true },
+     offsetY: 
+      { desc: '<@readonly> The offset position on x axis of the sprite in texture. Calculated automatically by editors like Zwoptex.',
+        type: 'number',
+        value: 0,
+        readonly: true },
+     atlasIndex: 
+      { desc: 'The index used on the TextureAtlas.',
+        type: 'number',
+        value: 0 },
+     texture: 
+      { desc: 'Texture used to render the sprite.',
+        type: 'image',
+        value: null },
+     textureRectRotated: 
+      { desc: '<@readonly> Indicate whether the texture rectangle is rotated.',
+        type: 'boolean',
+        value: false,
+        readonly: true },
+     opacity: { desc: 'Opacity of node', type: 'number', value: 0 },
+     opacityModifyRGB: 
+      { desc: 'Indicate whether or not the opacity modify color',
+        type: 'boolean',
+        value: false },
+     cascadeOpacity: 
+      { desc: 'Indicate whether or not it will set cascade opacity',
+        type: 'boolean',
+        value: false },
+     color: { desc: 'Color of node', type: 'color', value: null },
+     cascadeColor: 
+      { desc: 'Indicate whether or not it will set cascade color',
+        type: 'boolean',
+        value: false },
+     x: { desc: 'x axis position of node', type: 'number', value: 0 },
+     y: { desc: 'y axis position of node', type: 'number', value: 0 },
+     width: { desc: 'Width of node', type: 'number', value: 0 },
+     height: { desc: 'Height of node', type: 'number', value: 0 },
+     anchorX: 
+      { desc: 'Anchor point\'s position on x axis',
+        type: 'number',
+        value: 0 },
+     anchorY: 
+      { desc: 'Anchor point\'s position on y axis',
+        type: 'number',
+        value: 0 },
+     skewX: { desc: 'Skew x', type: 'number', value: 0 },
+     skewY: { desc: 'Skew y', type: 'number', value: 0 },
+     zIndex: 
+      { desc: 'Z order in depth which stands for the drawing order',
+        type: 'number',
+        value: 0 },
+     vertexZ: 
+      { desc: 'WebGL Z vertex of this node, z order works OK if all the nodes uses the same openGL Z vertex',
+        type: 'number',
+        value: 0 },
+     rotation: { desc: 'Rotation of node', type: 'number', value: 0 },
+     rotationX: { desc: 'Rotation on x axis', type: 'number', value: 0 },
+     rotationY: { desc: 'Rotation on y axis', type: 'number', value: 0 },
+     scale: { desc: 'Scale of node', type: 'number', value: 0 },
+     scaleX: { desc: 'Scale on x axis', type: 'number', value: 0 },
+     scaleY: { desc: 'Scale on y axis', type: 'number', value: 0 },
+     childrenCount: 
+      { desc: '<@readonly> Number of children',
+        type: 'number',
+        value: 0,
+        readonly: true },
+     visible: 
+      { desc: 'Indicate whether node is visible or not',
+        type: 'boolean',
+        value: false },
+     running: 
+      { desc: '<@readonly> Indicate whether node is running or not',
+        type: 'boolean',
+        value: false,
+        readonly: true },
+     ignoreAnchor: 
+      { desc: 'Indicate whether ignore the anchor point property for positionning',
+        type: 'boolean',
+        value: false },
+     tag: { desc: 'Tag of node', type: 'number', value: 0 },
+     arrivalOrder: 
+      { desc: 'The arrival order, indicates which children is added previously',
+        type: 'number',
+        value: 0 },
+     glServerState: 
+      { desc: 'The state of OpenGL server side',
+        type: 'number',
+        value: 0 } },
   EditBox: 
    { string: { desc: 'Content string of edit box', type: 'string', value: '' },
      maxLength: 

@@ -34,8 +34,12 @@ for (var i = 0; i < total; i++) {
     classMap[className] = data;
 }
 
-//add inherit cant refer from code
+//add inherit can't refer from code
 family['ccui.Node'] = 'cc.Node';
+family['ccs.Node'] = 'cc.Node';
+family['ccs.NodeRGBA'] = 'cc.NodeRGBA';
+family['ccs.Sprite'] = 'cc.Sprite';
+fs.writeFileSync('family.js', require('util').inspect(family));
 
 //find all child of cc.Node
 var inherit = {};
