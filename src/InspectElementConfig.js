@@ -551,7 +551,7 @@ var InspectElementConfig = { ClippingNode:
         value: 0 },
      vector: 
       { desc: 'Direction vector of the color gradient',
-        type: 'number',
+        type: 'point',
         value: 0 },
      compresseInterpolation: 
       { desc: 'Indicate whether or not the interpolation will be compressed',

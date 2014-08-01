@@ -131,6 +131,9 @@ function getProperties(classMap, className) {
             if (type === 'String') ret[name]['value'] = '';
         }
 
+        //fix vector type
+        if (name == 'vector') type = 'cc.Point';
+
         ret[name]['type'] = typeMap[type];
     }
     return ret;
