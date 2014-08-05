@@ -13,10 +13,26 @@ module.exports = function (grunt) {
       }
     },
     uglify: {
+      options: {
+        compress: {
+          // drop_console: true
+        }
+      },
       build: {
         files: {
           'bin/config.min.js' : ['src/InspectElementConfig.js'],
           'bin/injector.min.js' : ['src/PipePage.js', 'src/InspectElement.js', 'src/injector.js']
+        }
+      },
+      compress: {
+        files: {
+          'bin/elements-main.js' : ['bin/elements-main.js'],
+          'bin/index.js' : ['bin/index.js'],
+          'bin/InspectElement.js' : ['bin/InspectElement.js'],
+          'bin/PipeDevtool.js' : ['bin/PipeDevtool.js'],
+          'bin/PipePage.js' : ['bin/PipePage.js'],
+          'bin/tl.ui.AttrTable.js' : ['bin/tl.ui.AttrTable.js'],
+          'bin/tl.ui.TreeList.js' : ['bin/tl.ui.TreeList.js']
         }
       }
     },
@@ -45,6 +61,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-exec');
 
-  grunt.registerTask('default', ['clean', 'uglify', 'replace', 'exec']);
+  grunt.registerTask('default', ['clean', 'uglify:build', 'replace', 'uglify:compress', 'exec']);
 
 };

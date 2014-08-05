@@ -317,10 +317,32 @@
                         var tree_data = get_node_children(sc);
                         create_scenedraw(sc);
                         
-                        //me.on_update && me.on_update(sc, scene_data, scene_hash);
                         me.on_update && me.on_update(sc, tree_data, scene_hash);
                     };
                     
+                    cc.director._pushScene = cc.director.pushScene;
+                    cc.director.pushScene = function(sc){
+                        cc.director._pushScene(sc);
+                        
+                        scene_data = [], scene_hash = {};
+                        var tree_data = get_node_children(sc);
+                        create_scenedraw(sc);
+                        
+                        me.on_update && me.on_update(sc, tree_data, scene_hash);
+                    };
+
+                    cc.director._popScene = cc.director.popScene;
+                    cc.director.popScene = function(){
+                        cc.director._popScene();
+                        
+                        //wait for animation
+                        setTimeout(function() {
+                            create_scenedraw(cc.director.getRunningScene());
+                            me.on_start && me.on_start();
+
+                        },1000);
+                    };
+
                     cc.Node.prototype._addChild = cc.Node.prototype.addChild;
                     cc.Node.prototype.addChild = function(child, localZOrder, tag){
                         cc.Node.prototype._addChild.apply(this, [child, localZOrder, tag]);
