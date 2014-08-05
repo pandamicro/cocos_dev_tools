@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Cocos DevTools</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+<style>
+/* reset */
+body{font-family:"Myriad Set Pro", "Helvetica Neue", "Helvetica", "Arial", "Verdana", "sans-serif";word-wrap:break-word;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,figure,time{margin:0;padding:0;/*-webkit-text-size-adjust:none;*/}
+table{border-collapse:collapse;border-spacing:0;}
+fieldset,img{border:0;}
+ol,ul,li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
+q:before,q:after{content:'';}abbr,acronym{border:0;}
+section,aside,article,nav{display:block;}
+a{text-decoration: none;}
+i{font-style: normal;}
+html {font-size: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+body {margin:0; font-size: 14px; line-height: 1.231; }
+body, button, input, select, textarea {color: #000; }
+/* prevent callout */
+.nocallout {-webkit-touch-callout: none;}
+/* Contain floats */
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { *zoom: 1; }
+
+body{position:relative;height:100%;color: #333;overflow-x:hidden}
+.top-fix #app-lang-box a{margin-right: 15px;}
+.top-fix a{color: #6e6e6e;font-size: 12px;}
+.top-fix a:hover,.top-fix a.current{color: #ffffff;}
+.top-fix .lg-area{float: right;margin: 12px 10px 0 0;}
+
+
+*:link,*:visited,*:hover,*:active,*:focus {transition: color .20s linear,background-color .20s linear,border-color .20s linear}
+a {color: #999;text-decoration: none}
+a:hover { color: #333}
+p a,p a:visited {line-height: inherit}
+
+
+/* banner area */
+.top-area{width:100%;min-width:960px;height:750px;margin: 0 auto;overflow: hidden;}
+.top-area .inner{width:960px;height:100%;margin:0 auto;position: relative;}
+.top-area .inner-bg{width:110%;height:700px;overflow:hidden;background-color:#f2f2f2;position: absolute;top:0;left:-5%;}
+.top-area .inner .banner-icon .img{position:absolute;top:0;left:0;}
+.top-area h1{ font-size:6em; width:400px; letter-spacing:-3px;}
+
+.top-area .inner .button-wrap{position: absolute;top:0;left:0;z-index:11;padding-top:116px;}
+.top-area .inner .button-wrap .banner-title{padding-bottom:48px;}
+
+.top-area .inner .button-wrap .btn-dl{ width: 200px;margin-bottom: 10px;border-radius: 8px;position:relative;overflow:hidden; padding: 15px 15px}
+.top-area .inner .button-wrap .btn-dl { background-color:#66676c; color: #fff; display:block; }
+.top-area .inner .button-wrap .btn-dl .fa{ float:left; font-size: 2em; line-height: 0.75em; vertical-align: -20%; padding:5px 15px 5px 20px;}
+.top-area .inner .button-wrap .btn-dl p{ float:left; font-size:1.2em; }
+.top-area .inner .button-wrap .btn-dl span{ opacity:.5;font-size:.5em; display:block }
+.top-area .inner .button-wrap .btn-dl:hover{background-color:#000; }
+
+
+/*http://huaban.com/img/about/v3/download/Drag_arrow.png*/
+
+.computer{ background:url(http://huaban.com/img/about/v3/computer_png8.png) no-repeat; width: 750px; height: 480px; position: relative; left: 360px; top: 134px; zoom:.9}
+
+.macbook{background-color:#ccc;border-radius:20px 20px 0 0;
+box-shadow:inset 0 -25px 0 0 #333,inset 0 8px 0 18px #333;
+height:402px;width:600px;display:block;position:relative;top:134px;left:400px}
+.macbook i{display:block;width:100px;margin-left:-50px;height:8px;position:absolute;background:rgba(0,0,0,.3);bottom:-8px;left:50%;border-radius:0 0 10px 10px;z-index:2}
+.macbook:after{content:'';height:24px;left:-70px;position:absolute;right:-70px;top:100%;border-radius:42px/12px;border-top-left-radius:0;border-top-right-radius:0;background:linear-gradient(#ddd 0%,#ddd 60%,rgba(0,0,0,.2) 60%,rgba(0,0,0,.2) 100%);background-color:#ddd}
+.macbook:before{content:'';height:9px;width:9px;border-radius:4px;left:50%;margin-left:-4px;top:9px;background:rgba(99,99,99,.8);position:absolute;z-index:1}
+
+.macbook .screenshots {width: 94%;height: 88%;
+    /*background: url(http://i.imgur.com/W8IdvVk.jpg); background-size: 120%;*/
+    background-color: #584771;
+    background-image: linear-gradient(#418F66, #1D4F8D);
+    background: linear-gradient(to right bottom, #543a69, transparent), linear-gradient(to left bottom, #7a8e97, transparent), linear-gradient(to left top, #6093a8, transparent), linear-gradient(to right top, #bc8394, transparent) whitesmoke;
+    background: linear-gradient(#584771,#9f798e);
+position: absolute;top: 6%;left:3%;}
+.macbook .screenshots img {position: absolute;width:70%;top: 10%;box-shadow: 0px 1px 7px;transition: all 0.5s;}
+.macbook .screenshots img.m1 { left: 22%; }
+.macbook .screenshots img.m2 { right: 22%; }
+.macbook:hover .screenshots img {width:50%}
+.macbook:hover .screenshots img.m1 { left: 3%; top:12%; }
+.macbook:hover .screenshots img.m2 { right: 3%; top:32% }
+
+.app-main{width:960px;height:100%;margin:0 auto;position: relative; }
+.app-main h2 {font-size: 3em;font-weight: normal;color: #ddd;padding:25px 0px;}
+.qa .left-area {float: left;width: 460px;}
+.qa .right-area {float: right;width: 460px;}
+.qa ul li {position: relative;padding-left: 35px;margin-bottom: 35px;}
+.qa strong{line-height:2.2em;display:block; margin-bottom:10px }
+
+.mod-users .at{width: 49%;position: relative;padding: 20px 0 32px 60px;margin-bottom: 26px;border-radius: 0 0 12px 12px;box-sizing: border-box;display: block;float: left;}
+.mod-users .at p{
+font-size: 16px;
+line-height: 22px;
+color: #6d6d6d;
+font-size: 16px;
+padding: 0px 20px 20px 20px;
+margin: 0 0 0 -19px;
+border: 1px solid #e2e2e2;
+border-top: none;
+border-radius: 0 0 12px 12px;
+position: relative;
+}
+.mod-users .at .person {font-size: 12px;color: #ccc;text-transform: uppercase;display: block;margin: 23px 0 0 0;position: relative;}
+.mod-users .at .person:before {content: "";width: 0;height: 0;border: 8px solid transparent;border-top-color: #e2e2e2;top: -24px;left: 26px;position: absolute;}
+.mod-users .at .person:after {content: "";width: 0;height: 0;border: 8px solid transparent;border-top-color: #fff;top: -26px;left: 26px;position: absolute;}
+.mod-users .at .person img {border-radius:50%;left: 19px;position: relative; width:30px; height:30px;}
+.mod-users .at .person span {left: 40px; top:-10px; position: relative;}
+</style>
+<script id="sss" type="text/javascript" SRC="http://i.chukong-inc.com/js/jquery.min.js"></script>
+
+</head>
+<body>
+
+
+    <div class="top-area">
+		<div class="inner-bg clearfix"></div>
+		<div class="inner">
+			<div class="button-wrap lang-en">
+				<div class="banner-title btn-fade" style="margin-left: 0px; opacity: 1;"><h1>Cocos DevTools</h1><h5>A new weapon for debugging cocos2d apps</h5></div>
+				<a class="btn-dl btn-qr btn-fade clearfix" href="https://itunes.apple.com/us/app/ps-play-for-photoshop/id651937919" target="_blank">
+                    <i class="fa fa-download"></i>
+                    <p><b>Free Download</b><span>alpha version<span></p>
+                </a>
+                <p style="color:#999">Work only on Chrome now,<br>Other versions will be coming soon.</p>
+				<p style="display:none;color:#999">or drag <a href="javascript:(function(a,b,c,d){a[c]?(a[c].show && a[c].show()):(d=b.createElement('script'),d.id='cocos_devtools_script',d.setAttribute('charset','utf-8'),d.src='https://github.com/cocos-devtools/widgets.min.js?'+Math.floor(+new Date/1e7),b.body.appendChild(d))})(window,document,'cocos_devtools');" style="font-weight:900;" onclick="javascript:alert('Please drag this to your bookmark'); return false;">Cocos DevTools</a> to your Bookmark.</p>
+								<!-- English footer
+				<a id="video-btn" class="btn-play btn-fade" href="#"><p>Watch the Ps Play Video</p></a> -->
+                <img class="drag-hint" style="position: absolute;top: 210px;left: 181px;display:none" src="http://huaban.com/img/about/v3/download/Drag_arrow.png">
+			</div>
+            <!--div class="computer"></div-->
+            <!--div style="background: url(http://images.apple.com/macbook-pro/images/overview_display_hero.jpg);width: 1100px;height: 648px;position: absolute;opacity: 0.6;z-index: 4;top: 26px;  left: 206px;-webkit-transform: scale(0.675);
+            display: none;
+            "></div-->
+            <div class="macbook">
+                <div class="screenshots">
+                  <img class="m1" src="http://cdn.getforge.com/hammerformac.com/1383779662/assets/images/mac-screenshot-2.jpg">
+                  <img class="m2" src="http://cdn.getforge.com/hammerformac.com/1383779662/assets/images/mac-screenshot-1.jpg">
+                </div>
+            <i></i></div>
+		</div>
+	</div>
+    
+    <div class="app-main">
+        <div class="mod-fade qa">
+            <h2>Features</h2>
+            <div class="inner clearfix">
+                <div class="left-area">
+                    <ul>
+                        <li>
+                            <strong>Inspect Elements</strong>
+                            <p>...</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="right-area">
+                    <ul>
+                        <li>
+                            <strong>Change Attributes</strong>
+                            <p>...</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    
+        <div class="mod-fade qa">
+            <h2>Support</h2>
+            <div class="inner clearfix">
+                <div class="left-area">
+                    <ul>
+                        <li>
+                            <strong>How to install chrome extension?</strong>
+                            <p>...</p>
+                        </li>
+                        <li>
+                            <strong>Can I use it on the Firefox or Safari?</strong>
+                            <p>...</p>
+                        </li>
+                        <li>
+                            <strong>How to open the Cocos DevTools?</strong>
+                            <p>Chrome &gt; Tools &gt; Developer Tools… or Press F12</p>
+                        </li>
+                        <li>
+                            <strong>Why i saw my treeview is blank?</strong>
+                            <p>Maybe the current page is not a cocos2d app.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="right-area">
+                    <ul>
+                        <li>
+                            <strong>What is the short cut for select an element ?</strong>
+                            <p>Use the UP/DOWN key change the selected, and RIGHT key for expand an element.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="mod-users clearfix">
+            <h2>What did they say</h2>
+            <div class="inner">
+
+                <div class="at"><p>I am a web developer previously, and learning cocos2d about 3 weeks, It's a really amazing tool, very useful for newbies like me.</p>
+                <div class="person">
+                  <img src="http://discuss.cocos2d-x.org/user_avatar/discuss.cocos2d-x.org/shunlin/120/65.png">
+                  <span class="name">Sean Lin</span>
+                </div></div>
+                
+                <div class="at"><p>I am a web developer previously, and learning cocos2d about 3 weeks, It's a really amazing tool, very useful for newbies like me.</p>
+                <div class="person">
+                  <img src="http://discuss.cocos2d-x.org/user_avatar/discuss.cocos2d-x.org/pkuleon/120/3015.png">
+                  <span class="name">Tim.Leon</span>
+                </div></div>
+                
+            </div>
+        </div>
+    </div>
+    
+
+    <div style="padding: 60px 0; border-top:1px solid #ccc; text-align:center"> Copyright &copy; 2014 Cocos2d-x.org</div>
+    
+    
+    <script>
+    
+    (function(){try{
+    
+    var s = [],sz=80,bg=document.getElementsByClassName('inner-bg')[0],w=bg.clientWidth,h=bg.clientHeight,c=Math.ceil(w/(sz*2))*Math.ceil(h/(sz*2));
+    for (var i = 0; i<c; i++) {
+      s.push('<div style="float:left;opacity:.05;border-style:solid;border-width:'+sz+'px;width:0;height:0;border-color: rgba(0,0,0,'+Math.random()+') rgba(0,0,0,'+Math.random()+') rgba(0,0,0,'+Math.random()+') rgba(0,0,0,'+Math.random()+');"></div>');
+    }
+    bg.innerHTML = s.join('');
+    
+    }catch(e){}}())
+    </script>
+</body>
+</html>
