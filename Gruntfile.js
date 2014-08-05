@@ -38,7 +38,7 @@ module.exports = function (grunt) {
     },
     replace: {
       injectScript: {
-        src: ['src/*'],
+        src: ['src/*.js'],
         dest : 'bin/',
         replacements: [{
           from: /\/\/#injector\.min\.js#/g,
@@ -48,6 +48,13 @@ module.exports = function (grunt) {
           from: /\/\/#config\.min\.js#/g,
           to: "<%= grunt.file.read('bin/config.min.js') %>"
         }]
+      }
+    },
+    copy: {
+      main: {
+        files: [
+          {expand: true, cwd:'src/', src: ['*.html', '*.json', '*.png'], dest: 'bin/'}
+        ]
       }
     },
     exec: {
@@ -60,7 +67,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-exec');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['clean', 'uglify:build', 'replace', 'uglify:compress', 'exec']);
+  grunt.registerTask('default', ['clean', 'uglify:build', 'replace', 'uglify:compress', 'copy', 'exec']);
 
 };

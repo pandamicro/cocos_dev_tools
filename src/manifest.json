@@ -11,5 +11,9 @@
           "http://*/*",
           "https://*/*"
         ],
+  "icons": {
+      "128": "icon_128.png",
+      "48" : "icon_48.png"
+   },
   "content_security_policy": "default-src 'self'  chrome-extension-resource: ; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval';  connect-src *; frame-src *; img-src *;"
 }
