@@ -473,9 +473,12 @@ cc.DrawNode.TYPE_POLY = 2;
     var tmpl = '\
             <style>\
                 .tl-ui-tabs{ background:whitesmoke }\
-                .tl-ui-tabs a{ font:bold 14px "Helvetica Neue", Helvetica, Arial, sans-serif; line-height:30px; padding:0px 10px; color:#666 }\
+                .tl-ui-tabs a{ font:bold 14px "Helvetica Neue", Helvetica, Arial, sans-serif; line-height:30px; padding:0px 10px; color:#666; text-decoration:none; display:block; float:left }\
             </style>\
-            <div class="tl-ui-tabs" style="background:whitesmoke;border-top:1px solid silver;border-bottom:1px solid lightgray"><a href="javascript:void(0)">Elements</a></div>\
+            <div class="tl-ui-tabs clear" style="background:whitesmoke;border-top:1px solid silver;border-bottom:1px solid lightgray">\
+                <a id="btn_elem" title="Update elements" href="javascript:void(0)">Elements</a>\
+                <a id="btn_dock" title="Dock to left/top/right/bottom" style="float:right" href="javascript:void(0)">Dock</a>\
+            </div>\
             <div class="clear" style="position:relative;height:200px;right:0px;left:0px;z-index:9999;background-color:rgba(255,255,255,.2);">\
                 <div id="left" class="tl-ui-scroll" style="width:70%;height:100%;float:left;"></div>\
                 <div id="right" class="tl-ui-scroll" style="width:30%;height:100%;float:left;box-shadow:inset 1px 0px 0px silver;"></div>\
@@ -486,6 +489,121 @@ cc.DrawNode.TYPE_POLY = 2;
     el.style.backgroundColor = '#fff';
     el.innerHTML = tmpl;
     document.body.appendChild(el);
+    document.body.style.overflow = 'auto';
+    window.scrollTo(0,document.body.clientHeight);
+    
+    var left = document.getElementById('left'),
+        right = document.getElementById('right'),
+        btn_elem = document.getElementById('btn_elem'),
+        btn_dock = document.getElementById('btn_dock');
+        
+    // update tree
+    btn_elem.onclick = function(){
+        try{ window._cocos_devtools.ie.on_update(null, window._cocos_devtools.ie.get_node_children()) }catch(e){ }
+    };
+    
+    btn_dock.onclick = function(){
+        btn_dock.dock = btn_dock.dock || 0;
+        btn_dock.dock ++;
+        if (btn_dock.dock == 4){
+            btn_dock.dock = 0;
+        }
+        
+        if (btn_dock.dock == 0){
+            change_dock('bottom');
+            localStorage.setItem('change_dock','bottom');
+        }else if (btn_dock.dock == 1){
+            change_dock('left');
+            localStorage.setItem('change_dock','left');
+        }else if (btn_dock.dock == 2){
+            change_dock('top');
+            localStorage.setItem('change_dock','top');
+        }else if (btn_dock.dock == 3){
+            change_dock('right');
+            localStorage.setItem('change_dock','right');
+        }
+    };
+    
+    function change_dock(mode){
+        if (mode == 'bottom'){
+            el.style.position = 'static';
+            el.style.width = 'auto';
+            el.style.height = 'auto';
+            el.style.top = 'auto';
+            el.style.right = 'auto';
+            
+            left.style.width = '70%';
+            left.style.height = '100%';
+            left.style.float = 'left';
+            
+            right.style.width = '30%';
+            right.style.height = '100%';
+            right.style.float = 'left';
+            
+            el.children[2].style.height = '200px';
+            el.parentNode.appendChild(el);
+            window.scrollTo(0,document.body.clientHeight);
+        }else if(mode == 'left'){
+            el.style.position = 'absolute';
+            el.style.width = '25%';
+            el.style.height = '100%';
+            el.style.top = '0px';
+            el.style.right = 'auto';
+            
+            left.style.width = '100%';
+            left.style.height = '60%';
+            left.style.float = 'none';
+            
+            right.style.width = '100%';
+            right.style.height = '40%';
+            right.style.float = 'none';
+            
+            el.children[2].style.height = '90%';
+            el.parentNode.appendChild(el);
+        }else if (mode == 'top'){
+            el.style.position = 'static';
+            el.style.width = 'auto';
+            el.style.height = 'auto';
+            el.style.top = 'auto';
+            el.style.right = 'auto';
+            
+            left.style.width = '70%';
+            left.style.height = '100%';
+            left.style.float = 'left';
+            
+            right.style.width = '30%';
+            right.style.height = '100%';
+            right.style.float = 'left';
+            
+            el.children[2].style.height = '200px';
+            el.parentNode.insertBefore(el,el.parentNode.children[0]);
+            window.scrollTo(0,0);
+        }else if(mode == 'right'){
+            el.style.position = 'absolute';
+            el.style.width = '25%';
+            el.style.height = '100%';
+            el.style.top = '0px';
+            el.style.right = '0px';
+            
+            left.style.width = '100%';
+            left.style.height = '60%';
+            left.style.float = 'none';
+            
+            right.style.width = '100%';
+            right.style.height = '40%';
+            right.style.float = 'none';
+            
+            el.children[2].style.height = '90%';
+            el.parentNode.appendChild(el);
+        }
+    }
+    
+    // remember dock 
+    if (localStorage.getItem('change_dock')){
+        var d = localStorage.getItem('change_dock') || 'bottom';
+        change_dock(d);
+        btn_dock.dock = {'bottom':0,'left':1,'top':2,'right':3}[d];
+    }
 })();
 
 (function(_this){
@@ -589,5 +707,10 @@ cc.DrawNode.TYPE_POLY = 2;
         // load data first time
         ie.on_update(null, ie.get_node_children());
         
-        _this.COCOS_DEVTOOLS_WEB = function(){ console.log('COCOS_DEVTOOLS_WEB') };
+        // get global
+        var _cd = _this._cocos_devtools || {};
+        _cd.COCOS_DEVTOOLS_WEB = function(){ console.log('COCOS_DEVTOOLS_WEB') };
+        _cd.tt = tt, _cd.at = at, _cd.ie = ie;
+        
+        _this._cocos_devtools = _cd;
 })(this);

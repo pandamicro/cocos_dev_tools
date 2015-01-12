@@ -312,23 +312,34 @@
                     cc.director.runScene = function(sc){
                         cc.director._runScene(sc);
                         
+                        //hack code: delay 200ms wait for rendering on next frame.
+                        setTimeout(function() {
+                        
                         //get_hierarchy(sc);
                         scene_data = [], scene_hash = {};
                         var tree_data = get_node_children(sc);
                         create_scenedraw(sc);
                         
+                        console.log(sc._className, sc, sc._children[0]._className, sc.childrenCount, tree_data, scene_hash);
                         me.on_update && me.on_update(sc, tree_data, scene_hash);
+
+                        },200);
                     };
                     
                     cc.director._pushScene = cc.director.pushScene;
                     cc.director.pushScene = function(sc){
                         cc.director._pushScene(sc);
                         
+                        //hack code: delay 200ms wait for rendering on next frame.
+                        setTimeout(function() {
+                        
                         scene_data = [], scene_hash = {};
                         var tree_data = get_node_children(sc);
                         create_scenedraw(sc);
                         
                         me.on_update && me.on_update(sc, tree_data, scene_hash);
+                        
+                        },200);
                     };
 
                     cc.director._popScene = cc.director.popScene;

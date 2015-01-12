@@ -199,7 +199,7 @@
                 o.attr = attr;
                 o.setAttribute('attr',attr);
                 o.value = value;
-                if (data.readonly) el.setAttribute('readonly',true), o.setAttribute('readonly',true);
+                if (data.readonly) el.setAttribute('readonly',true), o.setAttribute('readonly',true), o.setAttribute('disabled',true);
                 
                 el.appendChild(o);
                 me.element.appendChild(el);
