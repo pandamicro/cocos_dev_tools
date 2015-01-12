@@ -3,7 +3,7 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    clean : ["bin"],
+    clean : ["bin","bin_web"],
     jshint: {
       // define the files to lint
       files: ['Gruntfile.js', 'src/*.js', 'test/*.js'],
@@ -16,6 +16,11 @@ module.exports = function (grunt) {
       options: {
         compress: {
           // drop_console: true
+        }
+      },
+      build_web: {
+        files: {
+          'bin_web/cocos-devtools-web.min.js' : ['src/tl.ui.AttrTable.js', 'src/tl.ui.TreeList.js', 'src/InspectElementConfig.js','src/InspectElement.js','src/index.web.js']
         }
       },
       build: {
@@ -70,5 +75,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('default', ['clean', 'uglify:build', 'replace', 'uglify:compress', 'copy', 'exec']);
+  grunt.registerTask('web', ['clean', 'uglify:build_web']);
 
 };
