@@ -1,4 +1,6 @@
 (function(){
+  try{
+    
     if (typeof window.cc.DrawNode == 'undefined'){
        // load cc.DrawNode
     
@@ -465,7 +467,9 @@ cc.DrawNode.TYPE_POLY = 2;
 
     
     
-    }
+    }// end if
+    
+  }catch(e){}
 })();
 
 
@@ -474,6 +478,7 @@ cc.DrawNode.TYPE_POLY = 2;
             <style>\
                 .tl-ui-tabs{ background:whitesmoke }\
                 .tl-ui-tabs a{ font:bold 14px "Helvetica Neue", Helvetica, Arial, sans-serif; line-height:30px; padding:0px 10px; color:#666; text-decoration:none; display:block; float:left }\
+                .clear:after{ content: ".";clear: both;display: block;height: 0;visibility: hidden;font-size: 0;line-height: 0; }\
             </style>\
             <div class="tl-ui-tabs clear" style="background:whitesmoke;border-top:1px solid silver;border-bottom:1px solid lightgray">\
                 <a id="btn_elem" title="Update elements" href="javascript:void(0)">Elements</a>\
@@ -487,6 +492,7 @@ cc.DrawNode.TYPE_POLY = 2;
     
     var el = document.createElement('div');
     el.style.backgroundColor = '#fff';
+    el.style.zIndex = 9999;
     el.innerHTML = tmpl;
     document.body.appendChild(el);
     document.body.style.overflow = 'auto';
@@ -561,7 +567,7 @@ cc.DrawNode.TYPE_POLY = 2;
             el.children[2].style.height = '90%';
             el.parentNode.appendChild(el);
         }else if (mode == 'top'){
-            el.style.position = 'static';
+            el.style.position = 'relative';
             el.style.width = 'auto';
             el.style.height = 'auto';
             el.style.top = 'auto';
@@ -607,6 +613,12 @@ cc.DrawNode.TYPE_POLY = 2;
 })();
 
 (function(_this){
+
+    if (typeof window.cc == 'undefined'){ left.innerHTML = 'cocos engine is not loaded.'; return; }
+    
+        var _cd = _this._cocos_devtools || {};
+        _cd.COCOS_DEVTOOLS_WEB = function(){ console.log('COCOS_DEVTOOLS_WEB') };
+    
         // ui
         var tt, at, ie;
         tt = new _this['tl.ui.TreeList'](document.getElementById('left'));
@@ -708,8 +720,6 @@ cc.DrawNode.TYPE_POLY = 2;
         ie.on_update(null, ie.get_node_children());
         
         // get global
-        var _cd = _this._cocos_devtools || {};
-        _cd.COCOS_DEVTOOLS_WEB = function(){ console.log('COCOS_DEVTOOLS_WEB') };
         _cd.tt = tt, _cd.at = at, _cd.ie = ie;
         
         _this._cocos_devtools = _cd;
