@@ -117,10 +117,18 @@ position: relative;
 		<div class="inner">
 			<div class="button-wrap lang-en">
 				<div class="banner-title btn-fade" style="margin-left: 0px; opacity: 1;"><h1>Cocos DevTools</h1><h5>A new weapon for debugging cocos2d apps</h5></div>
-				<a class="btn-dl btn-qr btn-fade clearfix" onclick="alert('Please drag this button to your bookmark.');return false;" href="javascript:void(function(d,a,c,b){d[c]&&typeof d[c].COCOS_DEVTOOLS_WEB=='function'?d[c].COCOS_DEVTOOLS_WEB():(b=a.createElement('script'),b.id='cocos_devtools_script',b.setAttribute('charset','utf-8'),b.src='http://h5.cocoachina.com/static/js/cocos-devtools-web.min.js?'+Math.floor(+new Date/1E7),a.body.appendChild(b))}(window,document,'_cocos_devtools'));" target="_blank">
-                    <i class="fa fa-download"></i>
-                    <p><b>Cocos Devtools</b><span> v1.0<span></p>
-                </a>
+                <div class="btn-dl btn-qr btn-fade clearfix">
+                                    <p><b>Drag this button to bookmark</b><span>cocos-devtools v1.0</span></p><a onclick="alert('Please drag this button to your bookmark.');return false;" href="javascript:void(function(d,a,c,b){d[c]&&typeof d[c].COCOS_DEVTOOLS_WEB=='function'?d[c].COCOS_DEVTOOLS_WEB():(b=a.createElement('script'),b.id='cocos_devtools_script',b.setAttribute('charset','utf-8'),b.src='http://h5.cocoachina.com/static/js/cocos-devtools-web.min.js?'+Math.floor(+new Date/1E7),a.body.appendChild(b))}(window,document,'_cocos_devtools'));" target="_blank" style="
+                    position: absolute;
+                    font-size: 0px;
+                    width: 100%;
+                    height: 100%;
+                    left: 0px;
+                    top: 0px;
+                    cursor: move;
+                ">Cocos Devtools v1.0</a>
+                </div>
+                
                 <p style="color:#999">Please drag this button to your bookmark.</p>
 				<p style="display:none;color:#999">or drag <a href="javascript:(function(a,b,c,d){a[c]?(a[c].show && a[c].show()):(d=b.createElement('script'),d.id='cocos_devtools_script',d.setAttribute('charset','utf-8'),d.src='https://github.com/cocos-devtools/widgets.min.js?'+Math.floor(+new Date/1e7),b.body.appendChild(d))})(window,document,'cocos_devtools');" style="font-weight:900;" onclick="javascript:alert('Please drag this to your bookmark'); return false;">Cocos DevTools</a> to your Bookmark.</p>
 								<!-- English footer

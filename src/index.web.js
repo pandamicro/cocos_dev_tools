@@ -477,16 +477,16 @@ cc.DrawNode.TYPE_POLY = 2;
     var tmpl = '\
             <style>\
                 .tl-ui-tabs{ background:whitesmoke }\
-                .tl-ui-tabs a{ font:bold 14px "Helvetica Neue", Helvetica, Arial, sans-serif; line-height:30px; padding:0px 10px; color:#666; text-decoration:none; display:block; float:left }\
+                .tl-ui-tabs a{ font:normal 14px "Helvetica Neue", Helvetica, Arial, sans-serif; line-height:30px; padding:0px 10px; color:#666; text-decoration:none; display:block; float:left }\
                 .clear:after{ content: ".";clear: both;display: block;height: 0;visibility: hidden;font-size: 0;line-height: 0; }\
             </style>\
             <div class="tl-ui-tabs clear" style="background:whitesmoke;border-top:1px solid silver;border-bottom:1px solid lightgray">\
-                <a id="btn_elem" title="Update elements" href="javascript:void(0)">Elements</a>\
+                <a id="btn_elem" title="Update elements" href="javascript:void(0)">Refresh</a>\
                 <a id="btn_dock" title="Dock to left/top/right/bottom" style="float:right" href="javascript:void(0)">Dock</a>\
             </div>\
             <div class="clear" style="position:relative;height:200px;right:0px;left:0px;z-index:9999;background-color:rgba(255,255,255,.2);">\
-                <div id="left" class="tl-ui-scroll" style="width:70%;height:100%;float:left;"></div>\
-                <div id="right" class="tl-ui-scroll" style="width:30%;height:100%;float:left;box-shadow:inset 1px 0px 0px silver;"></div>\
+                <div id="left" class="tl-ui-scroll" style="width:60%;height:100%;float:left;"></div>\
+                <div id="right" class="tl-ui-scroll" style="width:40%;height:100%;float:left;box-shadow:inset 1px 0px 0px silver;"></div>\
             </div>\
     ';
     
@@ -538,11 +538,11 @@ cc.DrawNode.TYPE_POLY = 2;
             el.style.top = 'auto';
             el.style.right = 'auto';
             
-            left.style.width = '70%';
+            left.style.width = '60%';
             left.style.height = '100%';
             left.style.float = 'left';
             
-            right.style.width = '30%';
+            right.style.width = '40%';
             right.style.height = '100%';
             right.style.float = 'left';
             
@@ -573,11 +573,11 @@ cc.DrawNode.TYPE_POLY = 2;
             el.style.top = 'auto';
             el.style.right = 'auto';
             
-            left.style.width = '70%';
+            left.style.width = '60%';
             left.style.height = '100%';
             left.style.float = 'left';
             
-            right.style.width = '30%';
+            right.style.width = '40%';
             right.style.height = '100%';
             right.style.float = 'left';
             
@@ -605,11 +605,11 @@ cc.DrawNode.TYPE_POLY = 2;
     }
     
     // remember dock 
-    if (localStorage.getItem('change_dock')){
+    (function(){
         var d = localStorage.getItem('change_dock') || 'bottom';
         change_dock(d);
         btn_dock.dock = {'bottom':0,'left':1,'top':2,'right':3}[d];
-    }
+    })();
 })();
 
 (function(_this){
@@ -670,7 +670,7 @@ cc.DrawNode.TYPE_POLY = 2;
                     p.className = 'nd';
                 }
             }
-            if(nd.id == tt.selected.id){ at.clear() }
+            if(tt && nd && tt.selected && nd.id == tt.selected.id){ at.clear() }
         };
         tt.on_insert = function(nd){
             // show an arrow when a collapsed node is void.
@@ -706,13 +706,21 @@ cc.DrawNode.TYPE_POLY = 2;
             tt.update(scene_data);
             //console.log('update',scene_data);
         };
-        ie.on_addChild = function(node, node_data){
+        ie.on_addChild = function(node, node_data, is_root){
             //console.log('addChild',node,node_data,node_data.parentId);
-            tt.insert(node_data, node_data.parentId);
+            if (is_root){
+                tt.insert(node_data, tt.element); // add to root of tree
+            }else{
+                tt.insert(node_data, node_data.parentId); // add to a node of tree
+            }
         };
-        ie.on_removeChild = function(node, node_data){
+        ie.on_removeChild = function(node, node_data, is_root){
             //console.log('removeChild',node,node_data,node_data.parentId);
-            tt.remove(node_data, node_data.parentId);
+            if (is_root){
+                tt.remove(node_data, tt.element); // remove from root of tree
+            }else{
+                tt.remove(node_data, node_data.parentId); // remove from a node of tree
+            }
         };
         ie.start();
         

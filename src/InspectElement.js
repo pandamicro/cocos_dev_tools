@@ -360,26 +360,28 @@
                         //try{
                         var a = create_item_data(child),
                             data = a.data,
-                            node = a.node;    
+                            node = a.node,
+                            is_root = data.parentId == cc.director.getRunningScene().__instanceId ? true : false;
                         scene_hash[node.__instanceId] = node;
-                        me.on_addChild && me.on_addChild(node, data);
+                        me.on_addChild && me.on_addChild(node, data, is_root);
                         //}catch(e){}
                         //console.log('parentId', child.getParent().__instanceId)
                     };
                     
                     cc.Node.prototype._removeChild = cc.Node.prototype.removeChild;
                     cc.Node.prototype.removeChild = function(child, cleanup){
-                        var parent,data={};
+                        var parent,data={},is_root;
                         try{
                             if (child.__instanceId == null) return;
                             scene_hash[child.__instanceId] = null;
                             delete scene_hash[child.__instanceId];
                             parent = child.getParent() || {};
                             data = {id: child.__instanceId, parentId: parent.__instanceId || null};
+                            is_root = data.parentId == cc.director.getRunningScene().__instanceId ? true : false;
                         }catch(e){}
                         
                         cc.Node.prototype._removeChild.apply(this, [child, cleanup]);
-                        me.on_removeChild && me.on_removeChild(child, data);
+                        me.on_removeChild && me.on_removeChild(child, data, is_root);
                     };
                     
                     tk_update = setInterval(function(){

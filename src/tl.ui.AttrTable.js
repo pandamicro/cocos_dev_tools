@@ -23,12 +23,12 @@
             .tl-ui-attr {display:block; position: relative;}\
             /*.tl-ui-attr:focus{ outline: 0px !important; }*/\
             .tl-ui-attr-i {border-bottom:1px solid gainsboro}\
-            .tl-ui-attr label {text-indent:10px; display: inline-block; width: 30%; color:#666; font: 100 12px Consolas, Lucida Console, monospace; vertical-align:middle; pointer-events:none;}\
+            .tl-ui-attr label {text-indent:10px; display: inline-block; width: 40%; color:#666; font: 100 12px Consolas, Lucida Console, monospace; vertical-align:middle; pointer-events:none;}\
             .tl-ui-attr input, .tl-ui-attr textarea{ vertical-align:middle; display: inline-block; font:100 12px Consolas, Lucida Console, monospace; padding:0; margin:0px 0px}\
             .tl-ui-attr-i[readonly="true"], .tl-ui-attr [readonly="true"]{ opacity:.5 }\
             \
             .tl-ui-attr input[type="text"], .tl-ui-attr input[type="number"], .tl-ui-attr input[type="image"],\
-            .tl-ui-attr textarea{ line-height:20px; width:69%; border:none; }\
+            .tl-ui-attr textarea{ line-height:20px; width:59%; border:none; }\
             \
             .tl-ui-attr input[type="number"]{ color:rgb(28, 0, 207); }\
             .tl-ui-attr input[type="text"],.tl-ui-attr textarea{ color:rgb(196, 26, 22); }\
@@ -51,8 +51,8 @@
                 
                 el.addEventListener('click', function(e){
                     var nd_dom = e.target;
-                    //e.stopPropagation();
-                    //e.preventDefault();
+                    e.stopPropagation();
+                    e.preventDefault();
                     
                     if (nd_dom.getAttribute('readonly')) return;
                     
@@ -65,6 +65,9 @@
                 
                 el.addEventListener('mousewheel', function(e){
                     var nd_dom = e.target;
+                    
+                    if (nd_dom.getAttribute('readonly')) return;
+                    
                     if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
                         on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
                     }
