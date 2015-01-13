@@ -730,5 +730,8 @@ cc.DrawNode.TYPE_POLY = 2;
         // get global
         _cd.tt = tt, _cd.at = at, _cd.ie = ie;
         
+        // current selected node
+        _cd.__defineGetter__('curr', function(){ return ie.get_selected() });
+        
         _this._cocos_devtools = _cd;
 })(this);

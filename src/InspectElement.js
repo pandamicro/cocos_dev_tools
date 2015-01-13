@@ -14,6 +14,11 @@
             var scenedraw, scenedraw_nodes = {node:null, selected_node:null}, SCENEDRAW_NAME = 'INSPECT_ELEMENT_DRAWING';
             var base_url = get_base_url();
             
+            function get_selected(){
+                return scenedraw_nodes.selected_node;
+            }
+            me.get_selected = get_selected;
+            
             // to public
             // me.scene_data = scene_data, me.scene_hash = scene_hash;
             
@@ -79,6 +84,12 @@
                     set_attr(data.attr, node, attr_name, attr_hash[attr_name].type, attr_hash[attr_name].readonly, attr_hash[attr_name].value, attr_hash[attr_name].desc);
                 }
                 
+                if (node.getChildren().length > 0) {
+                    // add a place-holder,and tell someone "i have a child" 
+                    data.nodes = []; data.nodes.length = node.getChildren().length;
+                    //d.nodes = [{id:null}]; 
+                }
+                
                 // in chrome
                 //if (node._className == 'LabelTTF'){
                 //    data.text = node.getString();
@@ -123,6 +134,8 @@
                         d = a.data,
                         node = a.node;
                         
+                        tree_data.push(d);
+                        /*
                         if (node.getChildren().length > 0) {
                             // add a place-holder,and tell someone "i have a child" 
                             d.nodes = []; d.nodes.length = node.getChildren().length;
@@ -131,6 +144,7 @@
                         }else{
                             tree_data.push(d);
                         }
+                        */
                         // get hash
                         scene_hash[node.__instanceId] = node;
                     }
