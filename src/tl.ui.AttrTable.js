@@ -51,8 +51,8 @@
                 
                 el.addEventListener('click', function(e){
                     var nd_dom = e.target;
-                    e.stopPropagation();
-                    e.preventDefault();
+                    //e.stopPropagation();
+                    //e.preventDefault();
                     
                     if (nd_dom.getAttribute('readonly')) return;
                     
