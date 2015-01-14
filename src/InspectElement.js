@@ -98,10 +98,12 @@
                 //data.name = node.constructor.name || null;
                 
                 for (var i in parent){
+                    try{
                     if (parent[i] && parent[i].__instanceId && parent[i].__instanceId == node.__instanceId) {
                         data.name = i;
                         break;
                     }
+                    }catch(e){ continue }
                 }
                 data.text = node._className || null;
                 return {

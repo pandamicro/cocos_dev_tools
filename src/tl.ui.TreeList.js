@@ -57,6 +57,7 @@
                 
                 el.addEventListener('mouseover', function(e){
                     var nd_dom = e.target;
+                    (nd_dom.tagName == 'EM') && (nd_dom = nd_dom.parentNode.parentNode);
                     (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I') && (nd_dom = nd_dom.parentNode); // get node dom, <div><b>name ...
                     
                     me.on_hover && me.on_hover(nd_dom);
@@ -74,11 +75,10 @@
                     e.preventDefault();
                     var nd_dom = e.target;
                     
-                    if (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I' || nd_dom.tagName == 'DIV'){
-                        (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I') && (nd_dom = nd_dom.parentNode); // get node dom, <div><b>name ...
-                        select_item(nd_dom);
-                        el.focus();
-                    }
+                    (nd_dom.tagName == 'EM') && (nd_dom = nd_dom.parentNode.parentNode);
+                    (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I') && (nd_dom = nd_dom.parentNode); // get node dom, <div><b>name ...
+                    select_item(nd_dom);
+                    el.focus();
                     //console.log(nd_dom, nd_dom.__nodes);
                 });
                 
