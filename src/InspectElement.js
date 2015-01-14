@@ -95,6 +95,14 @@
                 //    data.text = node.getString();
                 //}
                 // in plugin or webpage
+                //data.name = node.constructor.name || null;
+                
+                for (var i in parent){
+                    if (parent[i] && parent[i].__instanceId && parent[i].__instanceId == node.__instanceId) {
+                        data.name = i;
+                        break;
+                    }
+                }
                 data.text = node._className || null;
                 return {
                     data: data,

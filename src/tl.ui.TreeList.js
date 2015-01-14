@@ -26,10 +26,12 @@
             .tl-ui-tree .nd{ -moz-user-select:none; -webkit-user-select:none; cursor: default; color: #339; font-size: 12px; overflow: hidden; font-family: Consolas, Lucida Console, monospace; line-height: 16px; padding: 1px 0px 0px 16px}\
             \
             .tl-ui-tree .nd b{ font-weight:100; display: block}\
+            .tl-ui-tree .nd .c1{ color:#969 }\
             .tl-ui-tree .nd b:hover:before{ content:" "; pointer-events: none; position:absolute; left:2px; right:2px; height: 16px; background-color:rgba(128,192,255,0.12); border-radius: 4px;}\
             \
             .tl-ui-tree .nd[selected="true"] > b:before{ content:" "; pointer-events: none; position:absolute; left:0px; right:0px; height: 16px; z-index:-1; background-color:rgba(51,128,224,0.8); border-radius: 0px; }\
-            .tl-ui-tree .nd[selected="true"] > b{ color:white}\
+            .tl-ui-tree .nd[selected="true"] > b{ color:#fff }\
+            .tl-ui-tree .nd[selected="true"] > b > *{ color:#fff }\
             \
             .tl-ui-tree:hover .nd[selected="true"] > b:before{ background-color:rgba(51,128,224,.9); }\
             \
@@ -71,9 +73,12 @@
                     e.stopPropagation();
                     e.preventDefault();
                     var nd_dom = e.target;
-                    (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I') && (nd_dom = nd_dom.parentNode); // get node dom, <div><b>name ...
-                    select_item(nd_dom);
-                    el.focus();
+                    
+                    if (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I' || nd_dom.tagName == 'DIV'){
+                        (nd_dom.tagName == 'SPAN' || nd_dom.tagName == 'B' || nd_dom.tagName == 'I') && (nd_dom = nd_dom.parentNode); // get node dom, <div><b>name ...
+                        select_item(nd_dom);
+                        el.focus();
+                    }
                     //console.log(nd_dom, nd_dom.__nodes);
                 });
                 
@@ -197,7 +202,8 @@
                     nd_dom = document.createElement('DIV');
                     nd_dom.id = nd.id || null;
                     nd_dom.className = 'nd';
-                    nd_dom.innerHTML = '<b>'+ nd.text || '..' + '</b>';
+                    nd_dom.setAttribute('name', nd.text);
+                    nd_dom.innerHTML = '<b>'+ ((nd.name != undefined)?('<em class="c1">'+nd.name+'</em>:'):'') + nd.text || '..' + '</b>';
                     // set the source data
                     nd && (typeof nd == 'object') && (nd_dom.__data = nd);
                     if (nd && nd.nodes && nd.nodes.length){
@@ -219,7 +225,8 @@
             
             function clear_children(el){
                 el = el || me.element;
-                el.innerHTML = String(el.innerHTML).match(/<b>\S+<\/b>/)[0];  // reserve title and clean nodes
+                el.innerHTML = String(el.innerHTML).match(/<b>.*?<\/b>/)[0];  // reserve title and clean nodes
+                //el.innerHTML = String(el.innerHTML).match(/<b>\S+<\/b>/)[0];  // reserve title and clean nodes
             }
             me.clear_children = clear_children;
             

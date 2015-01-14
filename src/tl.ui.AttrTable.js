@@ -55,11 +55,14 @@
                     //e.preventDefault();
                     
                     if (nd_dom.getAttribute('readonly')) return;
+                    if (nd_dom.type == 'image') return;
                     
-                    if (nd_dom.tagName == 'INPUT' && nd_dom.type == 'number'){
-                        me.element.parentNode.style.overflowY = 'hidden';
-                    }else{
-                        me.element.parentNode.style.overflowY = 'overlay';
+                    if (navigator.userAgent.match('Chrome')){
+                        if (nd_dom.tagName == 'INPUT' && nd_dom.type == 'number'){
+                            me.element.parentNode.style.overflowY = 'hidden';
+                        }else{
+                            me.element.parentNode.style.overflowY = 'overlay';
+                        }
                     }
                 });
                 
@@ -68,7 +71,8 @@
                     
                     if (nd_dom.getAttribute('readonly')) return;
                     
-                    if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
+                    //if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
+                    if (nd_dom.tagName == 'INPUT' && nd_dom.type == 'number'){
                         on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
                     }
                 });
@@ -79,6 +83,7 @@
                     e.preventDefault();
                     
                     if (nd_dom.getAttribute('readonly')) return;
+                    if (nd_dom.type == 'image') return;
                     
                     if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
                         on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
@@ -94,6 +99,7 @@
                     e.preventDefault();
                     
                     if (nd_dom.getAttribute('readonly')) return;
+                    if (nd_dom.type == 'image') return;
                     
                     if (nd_dom.tagName == 'INPUT' || nd_dom.tagName == 'TEXTAREA'){
                         on_change(nd_dom, nd_dom.attr, get_value(nd_dom));
@@ -160,7 +166,6 @@
                 }else if (data.type == 'image'){
                     o.type = 'image';
                     o.title = value;
-                    o.src = value;
                     o.setAttribute('attr', attr);
                     
                     var img = new Image(), max_h = 100, max_w = 100,
@@ -179,9 +184,23 @@
                         _o.style.width = img.width + 'px', _o.style.height = img.height + 'px';
                         img.onload = null, img = null;
                     };
-                    img.src = value;
                     
-                    a.href = value, a.target = '_blank', a.className = 'image', a.appendChild(_o);
+                    if (value != undefined){
+                        o.src = value;
+                        o.setAttribute('value', value);
+                        
+                        img.src = value;
+                        a.href = value;
+                        a.target = '_blank';
+                    }else{
+                        navigator.userAgent.match('Firefox') && o.setAttribute('value', '');
+                        o.style.cursor = 'default';
+                        
+                        a.href = 'javascript:void(0)';
+                        a.style.cursor = 'default';
+                    }
+                    
+                    a.className = 'image', a.appendChild(_o);
                     o = a; // reset o
                 }else if (data.type == 'boolean'){
                     o.type = 'checkbox';
@@ -198,7 +217,9 @@
                     o.type = 'text';
                 }
                 
-                o.onblur = function(){ me.element.parentNode.style.overflowY = 'overlay' };
+                if (navigator.userAgent.match('Chrome')){
+                    o.onblur = function(){ me.element.parentNode.style.overflowY = 'overlay' };
+                }
                 o.attr = attr;
                 o.setAttribute('attr',attr);
                 o.value = value;
