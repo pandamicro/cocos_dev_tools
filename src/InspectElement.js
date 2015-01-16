@@ -59,8 +59,8 @@
                 return location.protocol + '//' + location.host + p.join('/');
             }
             
-            function create_item_data(node){
-                //console.log('create_item_data',node);
+            function serialize_item_data(node){
+                //console.log('serialize_item_data',node);
                 if (!node) return {
                     data: {id:null},
                     node: {__instanceId:null}
@@ -140,7 +140,7 @@
                 var a, d, node, tree_data = [];
                 for (var i=0, j=tree_children.length; i<j; i++) {
                     if (tree_children[i].getTag() != SCENEDRAW_NAME){
-                        a = create_item_data(tree_children[i]),
+                        a = serialize_item_data(tree_children[i]),
                         d = a.data,
                         node = a.node;
                         
@@ -186,7 +186,7 @@
                 function find(tree_children, tree_data){
                     var a, d, node;
                     for (var i=0, j=tree_children.length; i<j; i++) {
-                        a = create_item_data(tree_children[i]),
+                        a = serialize_item_data(tree_children[i]),
                         d = a.data,
                         node = a.node;
                         
@@ -382,7 +382,7 @@
                     cc.Node.prototype.addChild = function(child, localZOrder, tag){
                         cc.Node.prototype._addChild.apply(this, [child, localZOrder, tag]);
                         //try{
-                        var a = create_item_data(child),
+                        var a = serialize_item_data(child),
                             data = a.data,
                             node = a.node,
                             is_root = data.parentId == cc.director.getRunningScene().__instanceId ? true : false;

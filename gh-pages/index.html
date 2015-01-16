@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <title>Cocos DevTools</title>
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+<!--link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" /-->
 <style>
 /* reset */
 body{font-family:"Myriad Set Pro", "Helvetica Neue", "Helvetica", "Arial", "Verdana", "sans-serif";word-wrap:break-word;}
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,figure,time{margin:0;padding:0;/*-webkit-text-size-adjust:none;*/}
 table{border-collapse:collapse;border-spacing:0;}
 fieldset,img{border:0;}
-ol,ul,li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
+ol,ul,li{/*list-style:none;*/}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
 q:before,q:after{content:'';}abbr,acronym{border:0;}
 section,aside,article,nav{display:block;}
 a{text-decoration: none;}
@@ -41,19 +41,34 @@ p a,p a:visited {line-height: inherit}
 /* banner area */
 .top-area{width:100%;min-width:960px;height:750px;margin: 0 auto;overflow: hidden;}
 .top-area .inner{width:960px;height:100%;margin:0 auto;position: relative;}
-.top-area .inner-bg{width:110%;height:700px;overflow:hidden;background-color:#f2f2f2;position: absolute;top:0;left:-5%;}
+.top-area .inner-bg{
+    /*width:110%;height:700px;overflow:hidden;background-color:#f2f2f2;position: absolute;top:0;left:-5%;*/
+    
+    width:100%;height:700px;overflow:hidden;position: absolute;top:0;left:0;
+    background-color:#E1EBF2;
+    background-image:
+        linear-gradient(rgba(255,255,255,.4) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(255,255,255,.4) 2px, transparent 2px),
+        linear-gradient(rgba(255,255,255,.25) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.25) 1px, transparent 1px);
+    
+    background-size:100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px
+}
 .top-area .inner .banner-icon .img{position:absolute;top:0;left:0;}
 .top-area h1{ font-size:6em; width:400px; letter-spacing:-3px;}
 
 .top-area .inner .button-wrap{position: absolute;top:0;left:0;z-index:11;padding-top:116px;}
 .top-area .inner .button-wrap .banner-title{padding-bottom:48px;}
 
-.top-area .inner .button-wrap .btn-dl{ width: 200px;margin-bottom: 10px;border-radius: 8px;position:relative;overflow:hidden; padding: 15px 15px}
-.top-area .inner .button-wrap .btn-dl { background-color:#66676c; color: #fff; display:block; }
+.top-area .inner .button-wrap .btn-dl{ width: 200px;margin-bottom: 10px;border-radius: 4px;position:relative; padding: 20px 30px}
+.top-area .inner .button-wrap .btn-dl { background-color:#17f; color: #fff; display:block; }
 .top-area .inner .button-wrap .btn-dl .fa{ float:left; font-size: 2em; line-height: 0.75em; vertical-align: -20%; padding:5px 15px 5px 20px;}
 .top-area .inner .button-wrap .btn-dl p{ float:left; font-size:1.2em; }
 .top-area .inner .button-wrap .btn-dl span{ opacity:.5;font-size:.5em; display:block }
-.top-area .inner .button-wrap .btn-dl:hover{background-color:#000; }
+.top-area .inner .button-wrap .btn-dl:hover{background-color:#06c; }
+.top-area .inner .button-wrap .btn-dl img.drag-hint{ display:none; position: absolute;top:-380px;left: 181px; height:380px}
+.top-area .inner .button-wrap .btn-dl:hover img.drag-hint{ display:block }
 
 
 /*http://huaban.com/img/about/v3/download/Drag_arrow.png*/
@@ -74,19 +89,22 @@ height:402px;width:600px;display:block;position:relative;top:134px;left:400px}
     background: linear-gradient(to right bottom, #543a69, transparent), linear-gradient(to left bottom, #7a8e97, transparent), linear-gradient(to left top, #6093a8, transparent), linear-gradient(to right top, #bc8394, transparent) whitesmoke;
     background: linear-gradient(#584771,#9f798e);
 position: absolute;top: 6%;left:3%;}
-.macbook .screenshots img {position: absolute;width:70%;top: 10%;box-shadow: 0px 1px 7px;transition: all 0.5s;}
-.macbook .screenshots img.m1 { left: 22%; }
-.macbook .screenshots img.m2 { right: 22%; }
+.macbook .screenshots img {position: absolute;width:60%;top: 10%;box-shadow: 0px 1px 7px;transition: all 0.5s;}
+.macbook .screenshots img.m1 { left: 16%; top: 30%;}
+.macbook .screenshots img.m2 { right: 16%; }
 .macbook:hover .screenshots img {width:50%}
 .macbook:hover .screenshots img.m1 { left: 3%; top:12%; }
 .macbook:hover .screenshots img.m2 { right: 3%; top:32% }
 
 .app-main{width:960px;height:100%;margin:0 auto;position: relative; }
-.app-main h2 {font-size: 3em;font-weight: normal;color: #ddd;padding:25px 0px;}
-.qa .left-area {float: left;width: 460px;}
-.qa .right-area {float: right;width: 460px;}
-.qa ul li {position: relative;padding-left: 35px;margin-bottom: 35px;}
+.app-main h2 {font-size: 3em;font-weight: normal;color: #ccc;padding:20px 0px;}
+.qa {padding-bottom:80px;}
+.qa .left-area {float: left;width: 460px; line-height:2em;}
+.qa .right-area {float: right;width: 460px; line-height:2em;}
+.qa ul li {position: relative;padding-left: 35px;margin-bottom: 65px;}
 .qa strong{line-height:2.2em;display:block; margin-bottom:10px }
+
+.qa .left-area img,.qa .right-area img{width:90%;display:block;margin:5px auto 40px auto;box-shadow:2px 11px 22px #aaa;border-radius:8px;}
 
 .mod-users .at{width: 49%;position: relative;padding: 20px 0 32px 60px;margin-bottom: 26px;border-radius: 0 0 12px 12px;box-sizing: border-box;display: block;float: left;}
 .mod-users .at p{
@@ -116,24 +134,21 @@ position: relative;
 		<div class="inner-bg clearfix"></div>
 		<div class="inner">
 			<div class="button-wrap lang-en">
-				<div class="banner-title btn-fade" style="margin-left: 0px; opacity: 1;"><h1>Cocos DevTools</h1><h5>A new weapon for debugging cocos2d apps</h5></div>
+				<div class="banner-title btn-fade" style="margin-left: 0px; opacity: 1;">
+                    <h1>Cocos DevTools</h1>
+                    <!--h5>A new weapon for debugging cocos2d apps</h5-->
+                    <h3>Html5游戏调试神器全新出炉！</h3>
+                </div>
                 <div class="btn-dl btn-qr btn-fade clearfix">
-                                    <p><b>Drag this button to bookmark</b><span>cocos-devtools v1.0</span></p><a onclick="alert('Please drag this button to your bookmark.');return false;" href="javascript:void(function(d,a,c,b){d[c]&&typeof d[c].COCOS_DEVTOOLS_WEB=='function'?d[c].COCOS_DEVTOOLS_WEB():(b=a.createElement('script'),b.id='cocos_devtools_script',b.setAttribute('charset','utf-8'),b.src='http://h5.cocoachina.com/static/js/cocos-devtools-web.min.js?'+Math.floor(+new Date),a.body.appendChild(b))}(window,document,'_cocos_devtools'));" target="_blank" style="
-                    position: absolute;
-                    font-size: 0px;
-                    width: 100%;
-                    height: 100%;
-                    left: 0px;
-                    top: 0px;
-                    cursor: move;
-                ">Cocos Devtools v1.0</a>
+                    <img class="drag-hint" src="http://huaban.com/img/about/v3/download/Drag_arrow.png">
+                    <p><b>请拖拽此按钮到书签栏!</b><span>cocos-devtools v1.0</span></p>
+                    <a onclick="alert('请拖动此按钮到书签栏!');return false;" href="javascript:void(function(d,a,c,b){!d[c]&&(typeof d[c]=='undefined')&&(b=a.createElement('script'),b.id='cocos_devtools_script',b.setAttribute('charset','utf-8'),b.src='http://h5apps.appget.cn/static/js/cocos-devtools-web.min.js?'+Math.floor(+new Date),a.body.appendChild(b))}(window,document,'_cocos_devtools'));" target="_blank" style="position: absolute;font-size: 0px;width: 100%;height: 100%;left: 0px;top: 0px;cursor: move;">Cocos Devtools v1.0</a>
                 </div>
                 
-                <p style="color:#999">Please drag this button to your bookmark.</p>
-				<p style="display:none;color:#999">or drag <a href="javascript:(function(a,b,c,d){a[c]?(a[c].show && a[c].show()):(d=b.createElement('script'),d.id='cocos_devtools_script',d.setAttribute('charset','utf-8'),d.src='https://github.com/cocos-devtools/widgets.min.js?'+Math.floor(+new Date),b.body.appendChild(d))})(window,document,'cocos_devtools');" style="font-weight:900;" onclick="javascript:alert('Please drag this to your bookmark'); return false;">Cocos DevTools</a> to your Bookmark.</p>
+                <p>然后在标签栏点击"Cocos DevTools".</p>
 								<!-- English footer
 				<a id="video-btn" class="btn-play btn-fade" href="#"><p>Watch the Ps Play Video</p></a> -->
-                <img class="drag-hint" style="position: absolute;top: 210px;left: 181px;display:none" src="http://huaban.com/img/about/v3/download/Drag_arrow.png">
+                
 			</div>
             <!--div class="computer"></div-->
             <!--div style="background: url(http://images.apple.com/macbook-pro/images/overview_display_hero.jpg);width: 1100px;height: 648px;position: absolute;opacity: 0.6;z-index: 4;top: 26px;  left: 206px;-webkit-transform: scale(0.675);
@@ -141,37 +156,73 @@ position: relative;
             "></div-->
             <div class="macbook">
                 <div class="screenshots">
-                  <img class="m1" src="http://cdn.getforge.com/hammerformac.com/1383779662/assets/images/mac-screenshot-2.jpg">
-                  <img class="m2" src="http://cdn.getforge.com/hammerformac.com/1383779662/assets/images/mac-screenshot-1.jpg">
+                  <img class="m1" src="devtools.jpg">
+                  <img class="m2" src="a.jpg">
                 </div>
             <i></i></div>
 		</div>
 	</div>
     
     <div class="app-main">
+       <div class="mod-fade qa">
+            <h2>先体验一下把！<a style="font-size:.5em" href="http://h5.cocoachina.com/static/js-moonwarriors/" target="_blank">传送门&gt;</a></h2>
+            <div class="inner clearfix">
+                <iframe style="width:960px;height:600px;border:5px solid #17f;border-radius:8px;"src="http://h5.cocoachina.com/static/js-moonwarriors/"></iframe>
+            </div>
+        </div>
+        
         <div class="mod-fade qa">
-            <h2>Features</h2>
+            <h2>看看神器有多强？</h2>
             <div class="inner clearfix">
                 <div class="left-area">
-                    <ul>
+                    <ul style="list-style:none;">
                         <li>
-                            <strong>Inspect Elements</strong>
-                            <p>...</p>
+                            <strong>简便安装 Installation</strong>
+                            <img src="bookmark.jpg">
+                            <p>安装简便，只需拖动链接到收藏夹即可完成，无需任何扩展。找不到书签栏？可按照图示打开。目前支持 Chrome, Firefox, 360, 搜狗, 猎豹, 等高级浏览器。
+                            </p>
+                        </li>
+                        <li>
+                            <strong>检查元素 Inspect Elements</strong>
+                            <img src="treeview.jpg">
+                            <p>高亮显示鼠标点击对象，并在属性面板中显示该对象的属性。通常节点名字以 <code>"变量名:类名"</code> 来进行显示
+                            在现实列表树中显示对象前方带有箭头的对象表明含有子元素，可以点击展开。
+                            </p>
+                        </li>
+                        <li>
+                            <strong>全局对象 Global Object</strong>
+                            <img src="curr.jpg">
+                            <p>存储全局对象
+                            当前在树状列表中被选中的项目，会存储为全局变量，在控制台中通过访问 <code>_cocos_devtools.curr</code> 可以获取到当前对象。</p>
                         </li>
                     </ul>
                 </div>
                 <div class="right-area">
-                    <ul>
+                    <ul style="list-style:none;">
                         <li>
-                            <strong>Change Attributes</strong>
-                            <p>...</p>
+                            <strong>修改属性 Change Attributes</strong>
+                            <img src="attr.jpg">
+                            <p>可以预览修改对象属性，点击属性值，即可编辑属性，任何输入都将实时地进行修改并反馈到app中。
+                            对每一个属性的描述，都源自 Cosos 引擎官方文档，权威解释，方便理解。
+                            目前支持，数值，字符串，纹理，颜色等属性，对于某些只读属性将不能编辑。</p>
+                        </li>
+                        <li>
+                            <strong>自动更新 Automatic Update</strong>
+                            <img src="screen.jpg">
+                            <p>全自动跟踪场景内元件结构变化，即使在游戏中显示列表树变化频繁，
+                            绝大多数情况Inspector中的显示列表树是实时更新的。当然您也可以点击刷新按钮开重新加载显示列表树。</p>
+                        </li>
+                        <li>
+                            <strong>定制界面 Customize UI</strong>
+                            <p>可把界面停靠到浏览器的4个边上，调试就这么任性。</p>
                         </li>
                     </ul>
                 </div>
+                
             </div>
         </div>
     
-        <div class="mod-fade qa">
+        <!--div class="mod-fade qa">
             <h2>Support</h2>
             <div class="inner clearfix">
                 <div class="left-area">
@@ -203,11 +254,11 @@ position: relative;
                     </ul>
                 </div>
             </div>
-        </div>
+        </div-->
         
         
         
-        <div class="mod-users clearfix">
+        <!--div class="mod-users clearfix">
             <h2>What did they say</h2>
             <div class="inner">
 
@@ -224,22 +275,22 @@ position: relative;
                 </div></div>
                 
             </div>
-        </div>
+        </div-->
     </div>
     
 
-    <div style="padding: 60px 0; border-top:1px solid #ccc; text-align:center"> Copyright &copy; 2014 Cocos2d-x.org</div>
+    <div style="padding: 60px 0; border-top:1px solid #ccc; text-align:center"> Copyright &copy; 2015 Cocos2d-x.org</div>
     
     
     <script>
     
     (function(){try{
     
-    var s = [],sz=80,bg=document.getElementsByClassName('inner-bg')[0],w=bg.clientWidth,h=bg.clientHeight,c=Math.ceil(w/(sz*2))*Math.ceil(h/(sz*2));
-    for (var i = 0; i<c; i++) {
-      s.push('<div style="float:left;opacity:.05;border-style:solid;border-width:'+sz+'px;width:0;height:0;border-color: rgba(0,0,0,'+Math.random()+') rgba(0,0,0,'+Math.random()+') rgba(0,0,0,'+Math.random()+') rgba(0,0,0,'+Math.random()+');"></div>');
-    }
-    bg.innerHTML = s.join('');
+    //var s = [],sz=80,bg=document.getElementsByClassName('inner-bg')[0],w=bg.clientWidth,h=bg.clientHeight,c=Math.ceil(w/(sz*2))*Math.ceil(h/(sz*2));
+    //for (var i = 0; i<c; i++) {
+    //  s.push('<div style="float:left;opacity:.05;border-style:solid;border-width:'+sz+'px;width:0;height:0;border-color: rgba(0,0,0,'+Math.random()+') rgba(0,0,0,'+Math.random()+') rgba(0,0,0,'+Math.random()+') rgba(0,0,0,'+Math.random()+');"></div>');
+    //}
+    //bg.innerHTML = s.join('');
     
     }catch(e){}}())
     </script>

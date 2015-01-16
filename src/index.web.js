@@ -566,6 +566,7 @@ cc.DrawNode.TYPE_POLY = 2;
             
             el.children[2].style.height = '90%';
             el.parentNode.appendChild(el);
+            window.scrollTo(0,0);
         }else if (mode == 'top'){
             el.style.position = 'relative';
             el.style.width = 'auto';
@@ -601,6 +602,7 @@ cc.DrawNode.TYPE_POLY = 2;
             
             el.children[2].style.height = '90%';
             el.parentNode.appendChild(el);
+            window.scrollTo(0,0);
         }
     }
     
@@ -613,11 +615,12 @@ cc.DrawNode.TYPE_POLY = 2;
 })();
 
 (function(_this){
-
+    var _cd = {};
+    _this._cocos_devtools = _cd;
+    
     if (typeof window.cc == 'undefined'){ left.innerHTML = 'cocos engine is not loaded.'; return; }
     
-        var _cd = _this._cocos_devtools || {};
-        _cd.COCOS_DEVTOOLS_WEB = function(){ console.log('COCOS_DEVTOOLS_WEB') };
+       
     
         // ui
         var tt, at, ie;
@@ -732,6 +735,4 @@ cc.DrawNode.TYPE_POLY = 2;
         
         // current selected node
         _cd.__defineGetter__('curr', function(){ return ie.get_selected() });
-        
-        _this._cocos_devtools = _cd;
 })(this);
