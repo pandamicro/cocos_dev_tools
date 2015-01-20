@@ -16,12 +16,12 @@
             (function init(){
                 add_css('\
             .clear:after{ content: ".";clear: both;display: block;height: 0;visibility: hidden;font-size: 0;line-height: 0; }\
-            .tl-ui-scroll{overflow-y:overlay;} .tl-ui-scroll::-webkit-scrollbar {height:12px;overflow:visible;width:8px;background-color:transparent} .tl-ui-scroll::-webkit-scrollbar-thumb {border-radius:8px;background-color:rgba(0,0,0,0.2);}\
+            .tl-ui-scroll{overflow-y:overlay;} .tl-ui-scroll::-webkit-scrollbar {height:8px;overflow:visible;width:8px;background-color:transparent} .tl-ui-scroll::-webkit-scrollbar-thumb {border-radius:8px;background-color:rgba(0,0,0,0.2);}\
             @-moz-document url-prefix() { .tl-ui-scroll{overflow-y:scroll} }\
             \
             /* attribute table css */\
             .tl-ui-attr {display:block; position: relative;}\
-            /*.tl-ui-attr:focus{ outline: 0px !important; }*/\
+            .tl-ui-attr:focus{ outline: 0px !important; }\
             .tl-ui-attr-i {border-bottom:1px solid gainsboro}\
             .tl-ui-attr label {text-indent:10px; display: inline-block; width: 40%; color:#666; font: 100 12px Consolas, Lucida Console, monospace; vertical-align:middle; pointer-events:none;}\
             .tl-ui-attr input, .tl-ui-attr textarea{ vertical-align:middle; display: inline-block; font:100 12px Consolas, Lucida Console, monospace; padding:0; margin:0px 0px}\
@@ -46,6 +46,8 @@
                 
                 var el = document.createElement('DIV');
                 el.className = 'tl-ui-attr';
+                el.id = parseInt((new Date).getTime());
+                el.setAttribute('tabindex',2);
                 (root || document.body).appendChild(el);
                 me.element = el;
                 

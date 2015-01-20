@@ -326,12 +326,12 @@
                     //};
                     
                     // cc.loader._getRes = cc.loader.getRes;
-                    cc.loader.getRes = function(a){
+                    /*cc.loader.getRes = function(a){
                         //cc.loader._getRes.apply(cc.loader,Array.prototype.slice.call(arguments))
                         console.log(a)
                         return cc.loader.cache[a]||cc.loader.cache[cc.loader._aliases[a]]
                     };
-                    
+                    */
                     cc.director._runScene = cc.director.runScene;
                     cc.director.runScene = function(sc){
                         cc.director._runScene(sc);
@@ -344,7 +344,7 @@
                         var tree_data = get_node_children(sc);
                         create_scenedraw(sc);
                         
-                        console.log(sc._className, sc, sc._children[0]._className, sc.childrenCount, tree_data, scene_hash);
+                        //console.log(sc._className, sc, sc._children[0]._className, sc.childrenCount, tree_data, scene_hash);
                         me.on_update && me.on_update(sc, tree_data, scene_hash);
 
                         },200);
@@ -385,7 +385,10 @@
                         var a = serialize_item_data(child),
                             data = a.data,
                             node = a.node,
-                            is_root = data.parentId == cc.director.getRunningScene().__instanceId ? true : false;
+                            is_root = false;
+                            if (cc.director.getRunningScene() && cc.director.getRunningScene().__instanceId == data.parentId){
+                                is_root = true;
+                            }
                         scene_hash[node.__instanceId] = node;
                         me.on_addChild && me.on_addChild(node, data, is_root);
                         //}catch(e){}
@@ -394,15 +397,20 @@
                     
                     cc.Node.prototype._removeChild = cc.Node.prototype.removeChild;
                     cc.Node.prototype.removeChild = function(child, cleanup){
-                        var parent,data={},is_root;
+                        var parent,
+                            data = {},
+                            is_root = false;
                         try{
-                            if (child.__instanceId == null) return;
+                            if (child == null || child.__instanceId == null) return;
+                            
                             scene_hash[child.__instanceId] = null;
                             delete scene_hash[child.__instanceId];
                             parent = child.getParent() || {};
                             data = {id: child.__instanceId, parentId: parent.__instanceId || null};
-                            is_root = data.parentId == cc.director.getRunningScene().__instanceId ? true : false;
-                        }catch(e){}
+                            if (cc.director.getRunningScene() && cc.director.getRunningScene().__instanceId == data.parentId){
+                                is_root = true;
+                            }
+                        }catch(e){ }
                         
                         cc.Node.prototype._removeChild.apply(this, [child, cleanup]);
                         me.on_removeChild && me.on_removeChild(child, data, is_root);
