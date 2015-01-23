@@ -28,6 +28,7 @@
     };
     
     exports = function(t){
+        if (!res[lang]) return String(t);
         return String(res[lang][t] || t);
     };
     
