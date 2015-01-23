@@ -11,9 +11,10 @@
         /*t.apply(this, arguments), */
         this.element = document.createElement('DIV');
         this.element.className = 'tl-ui-chartfps';
+        this.element.style.color = '#333';
         this.element.style.position = 'relative';
         this.fps_txt = document.createElement('DIV');
-        this.fps_txt.style.position = 'absolute', this.fps_txt.style.zIndex = 9, this.fps_txt.style.font = 'normal 14px arial';
+        this.fps_txt.style.position = 'absolute', this.fps_txt.style.zIndex = 9, this.fps_txt.style.font = 'normal 18px arial';
         this.cvs = document.createElement('CANVAS');
         this.cvs.width = (this.element.clientWidth || 1000), this.cvs.height = (this.element.clientHeight || 100),
         this.cvs.style.width = "100%", this.cvs.style.height = this.cvs.height + 'px',
@@ -50,7 +51,7 @@
             c.fillStyle = "rgba(" +[red,Math.round(green*.6),green,.8].join()+ ")", c.fillRect(r * i, Math.round((1 - percent)*h), i /*- 1*/, Math.round(percent * h));
         }
         for (var r = 1; r <= 4; r++) {
-            c.fillStyle = "rgba(0,0,0,.2)", c.fillRect(0, Math.round((r/4)*h), w, 1);
+            c.fillStyle = "rgba(0,0,0,.2)", c.fillRect(0, Math.round((r/4)*h)-1, w, 1);
         }
         
         this.fps_txt.innerHTML = 'FPS:' + this._fps;

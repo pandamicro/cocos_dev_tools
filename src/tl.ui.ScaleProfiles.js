@@ -21,12 +21,14 @@
         add_css('\
             .tl-ui-scaleprofiles input[type="range"]{\
               -webkit-appearance:none;\
-              height:24px;\
+              height:28px;\
               background: linear-gradient(to right, #eee 0%, #eee 100%);\
               background-size:100% 4px;\
               background-position:center;\
               background-repeat:no-repeat;\
               overflow:hidden;\
+              padding-right:1px;padding-left:.5px;\
+              margin:0px;\
             }\
             .tl-ui-scaleprofiles input[type="range"]::-webkit-slider-thumb{\
               -webkit-appearance:none;\
@@ -36,7 +38,8 @@
               background:#fff;\
               position:relative;\
               z-index:3;\
-              box-shadow:0 2px 5px rgba(0,0,0,0.3);\
+              box-shadow: 0 0 2px rgba(0, 0, 0, 0.5), 1px 3px 5px rgba(0, 0, 0, 0.25);\
+              cursor: pointer;\
             }\
             .tl-ui-scaleprofiles input[type="range"]::-webkit-slider-thumb:after{\
               content:" ";\
@@ -61,18 +64,25 @@
         
         var me = this;
         this.element.innerHTML = '\
-            <fieldset style="border:1px solid #ccc;margin:10px;font:normal 14px arial;">\
-                <legend>Set speed: 1x</legend>\
-                <input type="range" class="speed-range" name="set-speed" min="0" max="' +(SPEED_CONFIG.length-1)+ '" style="width:100%;" value="6" />\
+            <fieldset style="border:1px solid #ccc;margin:10px;border-radius:4px;text-align:center;font:normal 14px arial;">\
+                <legend>' +(typeof I18n && I18n('Set speed:'))+ ' <b>1x</b></legend>\
+                <input type="range" class="speed-range" name="set-speed" min="0" max="' +(SPEED_CONFIG.length-1)+ '" style="width:80%;outline:none;" value="6" />\
             </fieldset>';
-            
+        this.element.style.color = '#333';
+        
+        this.element.addEventListener('mousemove', function(e){
+            var nd_dom = e.target;
+            if (nd_dom.type == 'range' && nd_dom.name == 'set-speed'){
+                nd_dom.parentNode.children[0].children[0].innerHTML = SPEED_CONFIG[nd_dom.value]+ 'x';
+            }
+        });
         this.element.addEventListener('change', function(e){
             var nd_dom = e.target;
             e.stopPropagation();
             e.preventDefault();
             
             if (nd_dom.type == 'range' && nd_dom.name == 'set-speed'){
-                nd_dom.parentNode.children[0].innerHTML = 'Set speed: ' +SPEED_CONFIG[nd_dom.value]+ 'x';
+                nd_dom.parentNode.children[0].children[0].innerHTML = SPEED_CONFIG[nd_dom.value]+ 'x';
                 me.on_change && me.on_change('speed', SPEED_CONFIG[nd_dom.value]);
             }
         });

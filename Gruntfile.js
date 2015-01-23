@@ -21,6 +21,7 @@ module.exports = function (grunt) {
       build_web: {
         files: {
           'bin_web/cocos-devtools-web.min.js' : [
+            'src/I18n.js',
             'src/tl.ui.ChartFPS.js',
             'src/tl.ui.ScaleProfiles.js',
             'src/tl.ui.AttrTable.js',

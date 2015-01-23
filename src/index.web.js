@@ -1,12 +1,19 @@
-(function(){
+(function(I18n){
+    I18n = I18n || function(t){ return String(t) };
+    
     var tmpl = '\
             <style>\
-                .tl-ui-tabs{ background-color:#ddd }\
-                .tl-ui-tabs a{ font:normal 14px "Helvetica Neue", Helvetica, Arial, sans-serif; line-height:30px; padding:0px 10px; color:#666; text-decoration:none; display:block; float:left }\
-                .tl-ui-tabs a.sel{ background-color:#fff; color:#333; font-weight:bold }\
-                .tl-ui-tools { font:normal 14px "Helvetica Neue", Helvetica, Arial, sans-serif; line-height:26px; border-bottom:1px solid #eee; font-size:2px; }\
-                .tl-ui-tools a{ color:#999; padding-left:10px; text-decoration:none; display:inline-block}\
+                .tl-ui-tabs{ background-color:#ddd; height:30px; overflow:hidden }\
+                .tl-ui-tabs .iconfont{ font-size:16px }\
+                .tl-ui-tabs a{ font:normal 14px "Helvetica Neue", Helvetica, Arial, sans-serif; color:#666; text-decoration:none; }\
+                .tl-ui-tabs > a{ line-height:30px; height:30px; padding:0px 10px; text-decoration:none; display:block; float:left }\
+                .tl-ui-tabs > a.sel{ background-color:#fff; color:#333; font-weight:bold; box-shadow:0px 0px 6px rgba(0,0,0,.5) }\
+                .tl-ui-tabs > a:hover{ color:#000; }\
+                .tl-ui-tools { font:normal 14px "Helvetica Neue", Helvetica, Arial, sans-serif; line-height:26px; border-bottom:1px solid #eee; }\
+                .tl-ui-tools > a{ color:#999; padding-left:10px; text-decoration:none; display:inline-block}\
+                .tl-ui-tools > a:hover{ color:#666 }\
                 .clear:after{ content: ".";clear: both;display: block;height: 0;visibility: hidden;font-size: 0;line-height: 0; }\
+                .jiathis_style .jiadiv_01 .link_01:first-child{ display:none !important }\
                 @font-face {\
                   font-family: "uxiconfont";\
                   src: url("http://t.tbcdn.cn/g/thx/brix/fonts/uxiconfont.eot");\
@@ -16,20 +23,26 @@
                    url("http://t.tbcdn.cn/g/thx/brix/fonts/uxiconfont.svg#svgFontName") format("svg");/* IE9*/\
                   /* iOS 4.1- */\
                 }\
-                .iconfont {font-family: "uxiconfont";font-size: 16px;font-style: normal;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}\
-                .icon-sousuo:before { content: "\f00d9"; }\
-                .icon-huanyipi:before { content: "\f00f7"; }\
+                .iconfont {font-family: "uxiconfont" !important;font-style: normal; font-weight:normal; -webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}\
             </style>\
             <div class="tl-ui-tabs clear">\
-                <a name="tab-dock" title="Dock to left/top/right/bottom" style="float:right" href="javascript:void(0)">Dock</a>\
-                <a name="tab-elements" href="javascript:void(0)" class="sel">Elements</a>\
-                <a name="tab-profiles" href="javascript:void(0)">Profiles</a>\
+                <a name="tab-dock" title="'+I18n('Dock to left/top/right/bottom')+'" style="float:right" href="javascript:void(0)"><em class="iconfont">Ġ</em> '+I18n('Dock')+'</a>\
+                <a name="tab-elements" href="javascript:void(0)" class="sel">'+I18n('Elements')+'</a>\
+                <a name="tab-profiles" href="javascript:void(0)">'+I18n('Profiles')+'</a>\
+                <!--a name="tab-weibo" title="'+I18n('Share to Sina Weibo')+'" href="javascript:void(0)"><em class="iconfont">ǔ</em></a-->\
+                \
+                <div class="jiathis_style" style="float:left;padding-top:6px">\
+                    <a href="http://www.jiathis.com/share?uid=1980395" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank" style="background:none !important; padding-left:5px !important;"><em class="iconfont">Ŕ</em> '+I18n('Share to..')+'</a>\
+                    <a class="jiathis_counter_style" style="height:16px;padding:0px"></a>\
+                </div>\
+                \
+                <a name="tab-qq" title="'+I18n('Join QQ group')+'" target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=e5f1711550b86949675b416a9334a18f1055feb1e335a76a4b5b90e0b583f78e"><em class="iconfont">Ȍ</em></a>\
             </div>\
             <div class="clear" style="position:relative;height:200px;right:0px;left:0px;z-index:9999;background-color:#fff">\
                 <div id="left" class="tl-ui-scroll" style="width:60%;height:100%;float:left;">\
                     <div class="tl-ui-tools">\
-                        <a title="Inspect elements" href="javascript:void(0)" name="btn-insp"><b class="iconfont icon-sousuo"></b>Inspect</a>\
-                        <a title="Update elements" href="javascript:void(0)" name="btn-refresh">Refresh</a>\
+                        <!--a href="javascript:void(0)" name="btn-insp"><em class="iconfont">Ċ</em> '+I18n('Inspect Element')+'</a-->\
+                        <a href="javascript:void(0)" name="btn-refresh"><em class="iconfont">ş</em> '+I18n('Refresh')+'</a>\
                     </div>\
                 </div>\
                 <div id="right" class="tl-ui-scroll" style="width:40%;height:100%;float:left;box-shadow:inset 1px 0px 0px silver;">\
@@ -41,7 +54,8 @@
     var el = document.createElement('div');
     el.style.backgroundColor = '#fff';
     el.style.zIndex = 9999;
-    el.style.boxShadow = '#aaa 1px 1px 0px, #aaa -1px -1px 0px';
+    el.style.boxShadow = '0px 0px 0px 1px #ccc';
+    el.style.overflow = 'hidden';
     el.innerHTML = tmpl;
     document.body.appendChild(el);
     document.body.style.overflow = 'auto';
@@ -54,6 +68,22 @@
         containers = el.children[2],
         btn_elem = document.getElementById('btn_elem'),
         btn_dock = tabs.children[0];
+        
+        
+    window.jiathis_config={
+        data_track_clickback:true,
+        url:"http://h5.cocoachina.com/static/cocos-devtools/",
+        summary:" ",
+        title:"Html5游戏调试神器全新出炉！调试Cocos2d游戏就这么任性！ #CocosDevtools#",
+        pic:"http://h5.cocoachina.com/static/cocos-devtools/a.jpg",
+        shortUrl:false,
+        hideMore:false
+    }
+    
+    var jia_script = document.createElement('SCRIPT');
+    document.body.appendChild(jia_script);
+    jia_script.src = 'http://v3.jiathis.com/code/jia.js?uid=1980395';
+    
     
     el.addEventListener('click', function(e){
         //e.stopPropagation();
@@ -63,7 +93,8 @@
             
         function clear_tabs(){    
             for (var i=0, j=tabs.children.length; i<j; i++){
-                tabs.children[i].className = '';
+                if (tabs.children[i].tagName == 'A')
+                    tabs.children[i].className = '';
             }
             for (var i=0, j=containers.children.length; i<j; i++){
                 containers.children[i].style.display = 'none';
@@ -192,13 +223,13 @@
         change_dock(d);
         btn_dock.dock = {'bottom':0,'left':1,'top':2,'right':3}[d];
     })();
-})();
+})(I18n);
 
 (function(_this){
     var _cd = {};
     _this._cocos_devtools = _cd;
     
-    if (typeof window.cc == 'undefined'){ left.innerHTML = 'cocos engine is not loaded.'; return; }
+    if (typeof window.cc == 'undefined'){ document.getElementById('left').innerHTML = 'Cocos2d-js engine is not loaded.'; return; }
         // ui
         var tt, at, cf, sp, // ui
             ie, cfps, sph; // inject
