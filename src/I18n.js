@@ -8,7 +8,7 @@
     }
 }(this, function (exports) {
     var lang = 'en-US';
-    lang = typeof window && typeof window.navigator && window.navigator.userLanguage || window.navigator.language || 'en-US';
+    lang = typeof window && window.navigator && window.navigator.userLanguage || window.navigator.language || 'en-US';
     
     var res = {};
     res['en-US'] = {};
