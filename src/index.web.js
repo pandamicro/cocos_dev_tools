@@ -14,6 +14,10 @@
                 .tl-ui-tools > a:hover{ color:#666 }\
                 .clear:after{ content: ".";clear: both;display: block;height: 0;visibility: hidden;font-size: 0;line-height: 0; }\
                 .jiathis_style .jiadiv_01 .link_01:first-child{ display:none !important }\
+                .a2a_menu {font-size:13px !important; border-radius: 0px !important; }\
+                .a2a_menu a {font-size:13px !important; border-radius: 0px !important; }\
+                a.a2a_i, i.a2a_i{ line-height:20px !important; font-size:13px !important; padding: 2px 6px !important; }\
+                a.a2a_i .a2a_svg, a.a2a_more .a2a_svg {background-size: 100% !important;height: 20px !important;line-height: 20px !important;width: 20px !important; }\
                 @font-face {\
                   font-family: "uxiconfont";\
                   src: url("http://t.tbcdn.cn/g/thx/brix/fonts/uxiconfont.eot");\
@@ -28,16 +32,21 @@
             <div class="tl-ui-tabs clear">\
                 <a name="tab-dock" title="'+I18n('Dock to left/top/right/bottom')+'" style="float:right" href="javascript:void(0)"><em class="iconfont">Ġ</em> '+I18n('Dock')+'</a>\
                 <a name="tab-elements" href="javascript:void(0)" class="sel">'+I18n('Elements')+'</a>\
-                <a name="tab-profiles" href="javascript:void(0)">'+I18n('Profiles')+'</a>\
+                <!--a name="tab-profiles" href="javascript:void(0)">'+I18n('Profiles')+'</a-->\
                 <!--a name="tab-weibo" title="'+I18n('Share to Sina Weibo')+'" href="javascript:void(0)"><em class="iconfont">ǔ</em></a-->\
-                \
+                '
+                + ((I18n.lang == 'zh-CN') ?
+                '\
                 <div class="jiathis_style" style="float:left;padding-top:6px">\
                     <a href="http://www.jiathis.com/share?uid=1980395" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank" style="background:none !important; padding-left:5px !important;"><em class="iconfont">Ŕ</em> '+I18n('Share to..')+'</a>\
                     <a class="jiathis_counter_style" style="height:16px;padding:0px"></a>\
                 </div>\
-                \
                 <a name="tab-qq" title="'+I18n('Join QQ group')+'" target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=e5f1711550b86949675b416a9334a18f1055feb1e335a76a4b5b90e0b583f78e"><em class="iconfont">Ȍ</em></a>\
-            </div>\
+                '
+                :
+                '<a class="share-this a2a_target" href="http://www.addtoany.com/share_save"><em class="iconfont">Ŕ</em> '+I18n('Share to..')+'</a>'
+                )+
+            '</div>\
             <div class="clear" style="position:relative;height:200px;right:0px;left:0px;z-index:9999;background-color:#fff">\
                 <div id="left" class="tl-ui-scroll" style="width:60%;height:100%;float:left;">\
                     <div class="tl-ui-tools">\
@@ -68,22 +77,48 @@
         containers = el.children[2],
         btn_elem = document.getElementById('btn_elem'),
         btn_dock = tabs.children[0];
+    
+    // cn     
+    if (I18n.lang == 'zh-CN'){
+        window.jiathis_config={
+            data_track_clickback:true,
+            url:"http://h5.cocoachina.com/static/cocos-devtools/",
+            summary:" ",
+            title:"Html5游戏调试神器全新出炉！调试Cocos2d游戏就这么任性！ #CocosDevtools#",
+            pic:"http://h5.cocoachina.com/static/cocos-devtools/a.jpg",
+            shortUrl:false,
+            hideMore:false
+        }
+        var jia_script = document.createElement('SCRIPT');
+        document.body.appendChild(jia_script);
+        jia_script.src = 'http://v3.jiathis.com/code/jia.js?uid=1980395';
+    // en
+    }else{
+        function my_addtoany_onready() {
+            a2a_config.target = '.share-this';
+            a2a.init('page');
+        }
         
+        // Setup AddToAny "onReady" callback
+        window.a2a_config = {};
+        a2a_config.tracking_callback = {
+            ready: my_addtoany_onready
+        };
+        a2a_config.linkname="A new weapon for debugging cocos2d apps.";
+        a2a_config.linkurl="http://h5.cocos.com/static/cocos-devtools/index-en.html";        
+        // Additional a2a_config properties may go here
+
+        // Load AddToAny script asynchronously
+        (function(){
+            var a = document.createElement('script');
+            a.type = 'text/javascript';
+            a.async = true;
+            a.src = 'http://static.addtoany.com/menu/page.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(a, s);
+        })();
         
-    window.jiathis_config={
-        data_track_clickback:true,
-        url:"http://h5.cocoachina.com/static/cocos-devtools/",
-        summary:" ",
-        title:"Html5游戏调试神器全新出炉！调试Cocos2d游戏就这么任性！ #CocosDevtools#",
-        pic:"http://h5.cocoachina.com/static/cocos-devtools/a.jpg",
-        shortUrl:false,
-        hideMore:false
     }
-    
-    var jia_script = document.createElement('SCRIPT');
-    document.body.appendChild(jia_script);
-    jia_script.src = 'http://v3.jiathis.com/code/jia.js?uid=1980395';
-    
     
     el.addEventListener('click', function(e){
         //e.stopPropagation();

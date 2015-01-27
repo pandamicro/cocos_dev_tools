@@ -19,7 +19,7 @@
         'Profiles': '性能调试',
         'Inspect Element': '检察元素',
         'Refresh': '刷新列表',
-        'Share to..': '分享Devtools到..',
+        'Share to..': '分享',
         'Share to Sina Weibo': '分享到新浪微博',
         'Join QQ group': '去QQ讨论组吐槽',
         'Set speed:': '设置APP速度：',
@@ -31,6 +31,8 @@
         if (!res[lang]) return String(t);
         return String(res[lang][t] || t);
     };
+    
+    exports.lang = lang;
     
     return exports;
 }));
