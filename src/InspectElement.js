@@ -36,7 +36,7 @@
                 };
                 
                 if (type == 'image'){
-                    from[name] && from[name].url && (to[name].value = base_url + '/' + from[name].url);
+                    from[name] && from[name].url && (to[name].value = base_url + '/' +cc.loader.resPath+ '/' + from[name].url);
                 }else if(type == 'color'){
                     var value = from[name];
                     var r=255,g=255,b=255,a=255;
@@ -79,6 +79,7 @@
                     className: node._className || null
                 };
                 set_attr(data.attr, node, '__instanceId', 'string', true);
+                
                 var attr_hash = InspectElementConfig[node._className] || {};
                 for (var attr_name in attr_hash){
                     set_attr(data.attr, node, attr_name, attr_hash[attr_name].type, attr_hash[attr_name].readonly, attr_hash[attr_name].value, attr_hash[attr_name].desc);
@@ -97,6 +98,7 @@
                 // in plugin or webpage
                 //data.name = node.constructor.name || null;
                 
+                // find var name form parent
                 for (var i in parent){
                     try{
                     if (parent[i] && parent[i].__instanceId && parent[i].__instanceId == node.__instanceId) {
@@ -105,6 +107,19 @@
                     }
                     }catch(e){ continue }
                 }
+                // find var name form grandpa
+                // if (!data.name){
+                    // var grandpa = parent && parent.getParent && parent.getParent() || {};
+                    // for (var i in grandpa){
+                        // try{
+                        // if (grandpa[i] && grandpa[i].__instanceId && grandpa[i].__instanceId == node.__instanceId) {
+                            // data.name = i;
+                            // break;
+                        // }
+                        // }catch(e){ continue }
+                    // }
+                // }
+                
                 data.text = node._className || null;
                 return {
                     data: data,
@@ -212,6 +227,144 @@
                 return scene_data;
             }
             me.get_hierarchy = get_hierarchy;
+            
+            
+            function begin_inspect(sc){
+                try{
+                    if (document.getElementById('cocos2d_inspect_layer')) return;
+                    var pos = {x:0,y:0}, inspect_node;
+                    
+                    function find(tree_children){
+                        var node, result = null, box;
+                        for (var i = tree_children.length - 1; i >= 0; i--) {
+                            node = tree_children[i];
+                            box = node.getBoundingBoxToWorld();
+                            
+                            // if hittest
+                            if (node.visible &&
+                                pos.x >= box.x &&
+                                pos.y >= box.y &&
+                                pos.x <= box.x + box.width && 
+                                pos.y <= box.y + box.height
+                                ){
+                                result = node;
+                                break;
+                            }
+                        }
+                        if (result != null){
+                            if (result.getLocalZOrder() <0 ) return result;
+                            
+                            if (result.getChildren().length > 0) {
+                                var r = find(result.getChildren());
+                                if (r != null) return r;
+                            }
+                        }
+                        return result;
+                    }
+                    
+                    function find_fullpath(node){
+                        var path = [serialize_item_data(node).data]; // default is me
+                        function f(n){
+                            if (n && n.getParent && n.getParent() != null && !(n.getParent() instanceof cc.Scene)){
+                                path.push(serialize_item_data(n.getParent()).data);
+                                f(n.getParent());
+                            }
+                        }
+                        f(node);
+                        return path.reverse(); // the order is [root, ... grandpa, papa, me]
+                    }
+                    
+                    var el = document.createElement('DIV');
+                    el.id = 'cocos2d_inspect_layer';
+                    el.style.position = 'absolute';
+                    el.style.zIndex = '10';
+                    el.style.width = '100%';
+                    el.style.height = '100%';
+                    el.style.top = '0px';
+                    el.innerHTML = '<style>\
+                    @-webkit-keyframes inspect_pulse_glow {\
+                        0% {\
+                            box-shadow: inset 0px 0px 0px 4px rgba(102,170,238,.8);\
+                        }\
+                        50% {\
+                            box-shadow: inset 0px 0px 0px 4px rgba(255,238,128,1);\
+                        }\
+                        100% {\
+                            box-shadow: inset 0px 0px 0px 4px rgba(102,170,238,.8);\
+                        }\
+                    }\
+                    @keyframes inspect_pulse_glow {\
+                        0% {\
+                            box-shadow: inset 0px 0px 0px 4px rgba(102,170,238,.8);\
+                        }\
+                        50% {\
+                            box-shadow: inset 0px 0px 0px 4px rgba(255,238,128,1);\
+                        }\
+                        100% {\
+                            box-shadow: inset 0px 0px 0px 4px rgba(102,170,238,.8);\
+                        }\
+                    }\
+                    .inspect_pulse_glow {\
+                        -webkit-animation-duration: 1500ms;\
+                        -moz-animation-duration: 1500ms;\
+                        animation-duration: 1500ms;\
+                        -webkit-animation-iteration-count: infinite;\
+                        -moz-animation-iteration-count: infinite;\
+                        animation-iteration-count: infinite;\
+                        -webkit-animation-name: inspect_pulse_glow;\
+                        animation-name: inspect_pulse_glow\
+                    }\
+                    </style>';
+                    //el.style.boxShadow = 'inset 0px 0px 0px 10px rgba(51,128,224,.5)';
+                    el.className = 'inspect_pulse_glow';
+                    cc.container.style.outline = 'rgba(51,128,224,.5) solid 2px';
+                    cc.container.style.boxShadow = '0px 0px 20px 10px rgba(51,128,224,.5)';
+                    
+                    el.onmousemove = function(e){
+                        //console.log(e.x - cc.container.offsetLeft, e.y - cc.container.offsetTop);
+                        var layerX = (e.layerX == null)? (e.x - cc.container.offsetLeft + window.scrollX) : e.layerX,
+                            layerY = (e.layerY == null)? (e.y - cc.container.offsetTop + window.scrollY) : e.layerY;
+                            
+                        pos = {
+                            x:Math.round(layerX/cc.view.getScaleX()),
+                            y:Math.round((cc.container.clientHeight - layerY)/cc.view.getScaleY())
+                        };
+                        
+                        inspect_node = find(cc.director.getRunningScene().getChildren());
+                        draw_rect(inspect_node, scenedraw_nodes.selected_node);
+                    };
+                    el.onclick = function(e){
+                        end_inspect();
+                        me.on_inspect_node && me.on_inspect_node(
+                            serialize_item_data(inspect_node).data,  // current node
+                            find_fullpath(inspect_node)                 // find full path
+                        );
+                    };
+                    el.onblurclick = function(e){
+                        if (e.target.name == 'btn-insp') return;
+                        if (e.target.id == 'cocos2d_inspect_layer') return;
+                        end_inspect();
+                    };
+                    cc.container.appendChild(el);
+                    document.body.addEventListener('click',el.onblurclick);
+                    
+                }catch(e){ console.log(e) }
+            }
+            me.begin_inspect = begin_inspect;
+            
+            function end_inspect(){
+                try{
+                    var el = document.getElementById('cocos2d_inspect_layer');
+                    document.body.removeEventListener('click', el.onblurclick);
+                    el.onmousemove = el.onclick = el.onblurclick = null;
+                    cc.container.style.outline = '';
+                    cc.container.style.boxShadow = '';
+                    cc.container.removeChild(el);
+                    el = null;
+                    
+                }catch(e){ console.log(e) }
+            }
+            me.end_inspect = end_inspect;
             
             function create_scenedraw(sc){
                 var last_scenedraw = sc.getChildByTag(SCENEDRAW_NAME);

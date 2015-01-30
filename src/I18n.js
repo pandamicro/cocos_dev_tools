@@ -7,12 +7,12 @@
         global['I18n'] = factory({}); // <script>
     }
 }(this, function (exports) {
-    var lang = 'en-US';
-    lang = typeof window && window.navigator && window.navigator.userLanguage || window.navigator.language || 'en-US';
+    var lang = 'en-us';
+    lang = String(typeof window && window.navigator && window.navigator.userLanguage || window.navigator.language || 'en-us').toLowerCase();
     
     var res = {};
-    res['en-US'] = {};
-    res['zh-CN'] = {
+    res['en-us'] = {};
+    res['zh-cn'] = {
         'Dock to left/top/right/bottom': '把窗口停靠到 左/上/右/下',
         'Dock': '停靠',
         'Elements': '场景元素',

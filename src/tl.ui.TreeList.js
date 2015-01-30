@@ -178,6 +178,38 @@
             }
             me.select_item = select_item;
             
+            function explore(path){
+                path = path || [];
+                var nd, nd_dom;
+                
+                var callback = function(){
+                    if (nd_dom.__is_not_inited && nd_dom.__data && nd_dom.__data.nodes){
+                        insert(nd_dom.__data.nodes, nd_dom);
+                        nd_dom.__is_not_inited = false;
+                    }
+                    if(nd_dom.className == 'nd c'){
+                        nd_dom.className = 'nd e'
+                    }
+                    find_by_path_and_expand_node();
+                    me.on_after_toggle && me.on_after_toggle(nd_dom);
+                };
+                
+                function find_by_path_and_expand_node(){
+                    if (path.length <=0){
+                        return;
+                    }
+                    nd = path.shift();
+                    nd_dom = document.getElementById(nd.id);
+                    
+                    me.on_before_toggle ? me.on_before_toggle(nd_dom, callback) : callback();
+                }
+                find_by_path_and_expand_node();
+                select(nd_dom); // select a nd_dom
+                me.element.parentNode.scrollTop = nd_dom.offsetTop; // scroll to selection
+                
+            };
+            me.explore = explore;
+            
             function remove(d, parent){
                 var nd, nd_dom;
                 if (typeof parent == 'number' || typeof parent == 'string'){

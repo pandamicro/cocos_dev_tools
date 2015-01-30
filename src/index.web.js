@@ -1,3 +1,26 @@
+// inject
+/*
+(function(){
+    var tmpl = '\
+        <div></div><div></div>\
+    ';
+    
+    var el = document.createElement('div');
+    el.innerHTML = tmpl;
+    el.className == 'clear';
+    document.body.appendChild(el);
+    window.part_tool = el.children[0];
+    window.part_game = el.children[1];
+    
+    setTimeout(function(){
+    
+    window.part_game.appendChild(cc.container);
+    cc.view._frame = window.part_game;
+    //cc.view._frame = window.part_game;//cc.container.parentNode;
+    cc.view._resizeEvent();
+    },500);
+})();
+*/
 (function(I18n){
     I18n = I18n || function(t){ return String(t) };
     
@@ -10,8 +33,9 @@
                 .tl-ui-tabs > a.sel{ background-color:#fff; color:#333; font-weight:bold; box-shadow:0px 0px 6px rgba(0,0,0,.5) }\
                 .tl-ui-tabs > a:hover{ color:#000; }\
                 .tl-ui-tools { font:normal 14px "Helvetica Neue", Helvetica, Arial, sans-serif; line-height:26px; border-bottom:1px solid #eee; }\
-                .tl-ui-tools > a{ color:#999; padding-left:10px; text-decoration:none; display:inline-block}\
+                .tl-ui-tools > a{ color:#999; padding:0 8px; text-decoration:none; display:inline-block}\
                 .tl-ui-tools > a:hover{ color:#666 }\
+                .tl-ui-tools > a[name="btn-insp"]:focus{ background-color: rgba(51,128,224,.6); color:#fff; box-shadow:inset 0px 0px 0px 4px #fff; }\
                 .clear:after{ content: ".";clear: both;display: block;height: 0;visibility: hidden;font-size: 0;line-height: 0; }\
                 .jiathis_style .jiadiv_01 .link_01:first-child{ display:none !important }\
                 .a2a_menu {font-size:13px !important; border-radius: 0px !important; }\
@@ -35,7 +59,7 @@
                 <!--a name="tab-profiles" href="javascript:void(0)">'+I18n('Profiles')+'</a-->\
                 <!--a name="tab-weibo" title="'+I18n('Share to Sina Weibo')+'" href="javascript:void(0)"><em class="iconfont">ǔ</em></a-->\
                 '
-                + ((I18n.lang == 'zh-CN') ?
+                + ((I18n.lang == 'zh-cn') ?
                 '\
                 <div class="jiathis_style" style="float:left;padding-top:6px">\
                     <a href="http://www.jiathis.com/share?uid=1980395" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank" style="background:none !important; padding-left:5px !important;"><em class="iconfont">Ŕ</em> '+I18n('Share to..')+'</a>\
@@ -48,13 +72,15 @@
                 )+
             '</div>\
             <div class="clear" style="position:relative;height:200px;right:0px;left:0px;z-index:9999;background-color:#fff">\
-                <div id="left" class="tl-ui-scroll" style="width:60%;height:100%;float:left;">\
+                <div id="container-elements" style="height:100%;">\
                     <div class="tl-ui-tools">\
                         <!--a href="javascript:void(0)" name="btn-insp"><em class="iconfont">Ċ</em> '+I18n('Inspect Element')+'</a-->\
                         <a href="javascript:void(0)" name="btn-refresh"><em class="iconfont">ş</em> '+I18n('Refresh')+'</a>\
                     </div>\
-                </div>\
-                <div id="right" class="tl-ui-scroll" style="width:40%;height:100%;float:left;box-shadow:inset 1px 0px 0px silver;">\
+                    <div id="left" class="tl-ui-scroll" style="width:60%;height:100%;float:left;">\
+                    </div>\
+                    <div id="right" class="tl-ui-scroll" style="width:40%;height:100%;float:left;box-shadow:inset 1px 0px 0px silver;">\
+                    </div>\
                 </div>\
                 <div id="container-profiles" class="tl-ui-scroll" style="display:none;height:100%;"></div>\
             </div>\
@@ -72,6 +98,7 @@
     
     var left = document.getElementById('left'),
         right = document.getElementById('right'),
+        container_elements = document.getElementById('container-elements'),
         container_profiles = document.getElementById('container-profiles'),
         tabs = el.children[1],
         containers = el.children[2],
@@ -79,7 +106,7 @@
         btn_dock = tabs.children[0];
     
     // cn     
-    if (I18n.lang == 'zh-CN'){
+    if (I18n.lang == 'zh-cn'){
         window.jiathis_config={
             data_track_clickback:true,
             url:"http://h5.cocoachina.com/static/cocos-devtools/",
@@ -139,8 +166,7 @@
         if (n == 'tab-elements'){
             clear_tabs();
             d.className = 'sel';
-            left.style.display = 'block';
-            right.style.display = 'block';
+            container_elements.style.display = 'block';
             
         }else if(n == 'tab-profiles'){
             clear_tabs();
@@ -149,6 +175,8 @@
             
         }else if(n == 'btn-refresh'){
             try{ window._cocos_devtools.ie.on_update(null, window._cocos_devtools.ie.get_node_children()) }catch(e){ }
+        }else if(n == 'btn-insp'){
+            try{ window._cocos_devtools.ie.begin_inspect() }catch(e){ }
         }
     });
     
@@ -185,11 +213,11 @@
             el.style.right = 'auto';
             
             left.style.width = '60%';
-            left.style.height = '100%';
+            left.style.height = 'calc(100% - 28px)';
             left.style.float = 'left';
             
             right.style.width = '40%';
-            right.style.height = '100%';
+            right.style.height = 'calc(100% - 28px)';
             right.style.float = 'left';
             
             el.children[2].style.height = '200px';
@@ -203,14 +231,14 @@
             el.style.right = 'auto';
             
             left.style.width = '100%';
-            left.style.height = '60%';
+            left.style.height = 'calc(60% - 30px)';
             left.style.float = 'none';
             
             right.style.width = '100%';
             right.style.height = '40%';
             right.style.float = 'none';
             
-            el.children[2].style.height = '90%';
+            el.children[2].style.height = 'calc(100% - 30px)';
             el.parentNode.appendChild(el);
             window.scrollTo(0,0);
         }else if (mode == 'top'){
@@ -221,11 +249,11 @@
             el.style.right = 'auto';
             
             left.style.width = '60%';
-            left.style.height = '100%';
+            left.style.height = 'calc(100% - 28px)';
             left.style.float = 'left';
             
             right.style.width = '40%';
-            right.style.height = '100%';
+            right.style.height = 'calc(100% - 28px)';
             right.style.float = 'left';
             
             el.children[2].style.height = '200px';
@@ -239,14 +267,14 @@
             el.style.right = '0px';
             
             left.style.width = '100%';
-            left.style.height = '60%';
+            left.style.height = 'calc(60% - 30px)';
             left.style.float = 'none';
             
             right.style.width = '100%';
             right.style.height = '40%';
             right.style.float = 'none';
             
-            el.children[2].style.height = '90%';
+            el.children[2].style.height = 'calc(100% - 30px)';
             el.parentNode.appendChild(el);
             window.scrollTo(0,0);
         }
@@ -425,6 +453,9 @@
                 tt.remove(node_data, node_data.parentId); // remove from a node of tree
             }
         };
+        ie.on_inspect_node = function(node_data, node_fullpath){
+            tt.explore(node_fullpath);
+        };
         ie.start();
         
         // load data first time
@@ -437,3 +468,14 @@
         // current selected node
         _cd.__defineGetter__('curr', function(){ return ie.get_selected() });
 })(this);
+
+
+
+var _hmt = _hmt || [];
+_hmt.push(['_trackEvent', 'Open', 'CocosDevtools']);
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cf6e56197d15d6d01685b29c92d56831";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
