@@ -35,7 +35,7 @@ module.exports = function (grunt) {
       build: {
         files: {
           'bin/config.min.js' : ['src/InspectElementConfig.js'],
-          'bin/injector.min.js' : ['src/PipePage.js', 'src/InspectElement.js', 'src/injector.js']
+          'bin/injector.min.js' : ['src/PipePage.js', 'src/InspectElement.js', 'src/InspectElement.FixDrawNode.js', 'src/injector.js']
         }
       },
       compress: {
@@ -83,7 +83,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['clean', 'uglify:build', 'replace', 'uglify:compress', 'copy', 'exec']);
+  grunt.registerTask('default', ['clean', 'uglify:build', 'replace', 'uglify:compress', 'copy', 'exec', 'uglify:build_web']);
   grunt.registerTask('web', ['clean', 'uglify:build_web']);
 
 };
