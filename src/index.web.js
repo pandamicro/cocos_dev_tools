@@ -56,7 +56,7 @@
             <div class="tl-ui-tabs clear">\
                 <a name="tab-dock" title="'+I18n('Dock to left/top/right/bottom')+'" style="float:right" href="javascript:void(0)"><em class="iconfont">Ġ</em> '+I18n('Dock')+'</a>\
                 <a name="tab-elements" href="javascript:void(0)" class="sel">'+I18n('Elements')+'</a>\
-                <!--a name="tab-profiles" href="javascript:void(0)">'+I18n('Profiles')+'</a-->\
+                <a name="tab-profiles" href="javascript:void(0)">'+I18n('Profiles')+'</a>\
                 <!--a name="tab-weibo" title="'+I18n('Share to Sina Weibo')+'" href="javascript:void(0)"><em class="iconfont">ǔ</em></a-->\
                 '
                 + ((I18n.lang == 'zh-cn') ?
@@ -74,7 +74,7 @@
             <div class="clear" style="position:relative;height:200px;right:0px;left:0px;z-index:9999;background-color:#fff">\
                 <div id="container-elements" style="height:100%;">\
                     <div class="tl-ui-tools">\
-                        <!--a href="javascript:void(0)" name="btn-insp"><em class="iconfont">Ċ</em> '+I18n('Inspect Element')+'</a-->\
+                        <a href="javascript:void(0)" name="btn-insp"><em class="iconfont">Ċ</em> '+I18n('Inspect Element')+'</a>\
                         <a href="javascript:void(0)" name="btn-refresh"><em class="iconfont">ş</em> '+I18n('Refresh')+'</a>\
                     </div>\
                     <div id="left" class="tl-ui-scroll" style="width:60%;height:100%;float:left;">\
